@@ -1,13 +1,13 @@
 /* eslint-disable import/no-unresolved */
 import * as React from 'react';
 import { hot } from 'react-hot-loader';
-import { Layout,  Breadcrumb } from 'antd';
+import { Layout } from 'antd';
 import 'antd/dist/antd.css'; 
 
 
 import MyHeader from './Layout/Header/MyHeader';
 import MyFooter from './Layout/Footer/MyFooter';
-
+import Login from './components/Login/Login';
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 const App = () => {
     const { Header, Footer,  Content } = Layout;
@@ -17,13 +17,10 @@ const App = () => {
                 
                 <MyHeader />
             </Header>
-            <Content style={{ padding: '0 50px' }}>
-                <Breadcrumb style={{ margin: '16px 0' }}>
-                    <Breadcrumb.Item>Home</Breadcrumb.Item>
-                    <Breadcrumb.Item>List</Breadcrumb.Item>
-                    <Breadcrumb.Item>App</Breadcrumb.Item>
-                </Breadcrumb>
-                <div className="site-layout-content">Content</div>
+            <Content style={{ padding: '0 50px' }}>                
+                <div className="site-layout-content">
+                    <Login />
+                </div>
                 </Content>
                 <Footer style={{ textAlign: 'center' }}>
                     <MyFooter></MyFooter>
