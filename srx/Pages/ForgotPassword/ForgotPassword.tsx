@@ -10,12 +10,17 @@ import { map, catchError } from 'rxjs/operators';
 import { of } from 'rxjs';
 
 import config from '../../Config/config';
+
+import {    
+    Link   
+  } from "react-router-dom";
+
+  
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-const Login = () => {
+const ForgotPassword = () => {
     const history = useHistory();
 
-    let storageCredentials = localStorage.getItem("credentials");    
-    let credentials = (storageCredentials) ?  JSON.parse(storageCredentials) : {};
+    
     
     const layout = {
         labelCol: { span: 8 },
@@ -71,7 +76,7 @@ return (<Form
 {...layout}
 style={{ margin: '16px 0' }}
 name="basic"
-initialValues={{ ...credentials, remember: true }}
+initialValues={{ remember: true }}
 onFinish={onFinish}
 onFinishFailed={onFinishFailed}
 >
@@ -83,24 +88,14 @@ onFinishFailed={onFinishFailed}
         <Input autoFocus={true} placeholder="Please enter username" />
     </Form.Item>
 
-    <Form.Item
-    label="Password"
-    name="password"
-    rules={[{ required: true, message: 'Please input your password!' }]}
-    >
-        <Input.Password placeholder="Please enter password" />
-    </Form.Item>
-
-    <Form.Item {...tailLayout} name="remember" valuePropName="checked">
-    <Checkbox>Remember me</Checkbox>
-    </Form.Item>
 
     <Form.Item {...tailLayout}>
         <Button type="primary" htmlType="submit">
             Submit
         </Button>
     </Form.Item>
+    <Link to="/">Back to Login</Link>
 </Form>);
 };
 
-export default Login;
+export default ForgotPassword;

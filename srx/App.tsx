@@ -12,10 +12,9 @@ import {
 
 import MyHeader from './Layout/Header/MyHeader';
 import MyFooter from './Layout/Footer/MyFooter';
-import Login from './components/Login/Login';
+import MyRouters from './Routers/MyRouters';
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-const App = () => {
-    console.log(process.env)
+const App = () => {    
     const { Header, Footer,  Content } = Layout;
 
     return (<Layout className="layout">
@@ -26,7 +25,7 @@ const App = () => {
             <Content style={{ padding: '0 50px' }}>                
                 <BrowserRouter  >
                     <div className="site-layout-content">
-                        <Login />
+                        <MyRouters />
                     </div>                    
                 </BrowserRouter >
                 </Content>
