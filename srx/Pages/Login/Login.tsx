@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import * as React from 'react';
+import React, { useState} from 'react';
 import { useHistory } from 'react-router-dom';
 
 import {    
@@ -7,16 +7,12 @@ import {
   } from "react-router-dom";
 
 import { Form, Input, Button, Checkbox, message } from 'antd';
+import { signIn } from '../../services';
 
-import { ajax } from 'rxjs/ajax';
-import { map, catchError } from 'rxjs/operators';
-import { of } from 'rxjs';
-
-import config from '../../Config/config';
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 const Login = () => {
     const history = useHistory();
-
+    const [loading, SetLoading ] = useState(false);
     const storageCredentials = localStorage.getItem("credentials");    
     const credentials = (storageCredentials) ?  JSON.parse(storageCredentials) : {};
     
@@ -31,36 +27,23 @@ const Login = () => {
     
     const onFinish = (values: any) => {
         
-
-        const users$ = ajax({
-            url: 'http://localhost/cart/api/public/v1/oauth/token',
-            method: 'POST',
-            headers: config.ajax.header,
-            body: {                 
-                ...config.ajax.signBody,
-                ...{ 
-                    "password":values.password,    
-                    "username":values.username,
-                }
-            }
-          }).pipe(            
-            catchError(error => {
-                message.error('Sorry login credential was wrong');
-
-              console.log('error: ', error);
-              return of(error);
-            })
-          );
-
-          
+        SetLoading(true);
+       
         
-          users$.subscribe(res=> {
+        signIn(values).subscribe(res=> {
+            SetLoading(false)
             if(values.remember){
                 localStorage.setItem("credentials", JSON.stringify(values));
             }else{
                 localStorage.removeItem("credentials");
-            }              
-            history.push('/home');
+            }    
+            
+            localStorage.setItem("token", JSON.stringify(res.response));
+
+            history.replace('/home');
+          }, error=>{
+            SetLoading(false)
+            message.error('Sorry login credential was wrong');
           })
         
     };
@@ -99,8 +82,8 @@ onFinishFailed={onFinishFailed}
     </Form.Item>
 
     <Form.Item {...tailLayout}>
-        <Button type="primary" htmlType="submit">
-            Submit
+        <Button type="primary" htmlType="submit" loading={loading}>
+            Sign In
         </Button>
     </Form.Item>
     <Link to="/forgotPassword">Forgot password</Link>

@@ -3,6 +3,7 @@
 import React from "react";
 import {    
   HashRouter,
+  Redirect,
     Route    
   } from "react-router-dom";
 
@@ -24,5 +25,7 @@ const MyRouters = () => {
         </Route>        
       </HashRouter></>);
 }
+
+
 
 export default MyRouters;
