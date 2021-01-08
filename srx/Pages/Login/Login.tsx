@@ -1,20 +1,28 @@
+/* eslint-disable import/no-duplicates */
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import React, { useState} from 'react';
+import React, { useEffect, useState} from 'react';
 import { useHistory } from 'react-router-dom';
 
-import {    
-    Link   
-  } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 import { Form, Input, Button, Checkbox, message } from 'antd';
-import { signIn } from '../../services';
+import { signIn, isLoggedIn } from '../../services';
+import { connect } from "react-redux";
+
+
+const mapStateToProps = (state: { token: any;  }) => {
+    return { token: state.token };
+};
 
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-const Login = () => {
+const LoginComponent = (props : any) => {
     const history = useHistory();
     const [loading, SetLoading ] = useState(false);
     const storageCredentials = localStorage.getItem("credentials");    
     const credentials = (storageCredentials) ?  JSON.parse(storageCredentials) : {};
+    
+
+   
     
     const layout = {
         labelCol: { span: 8 },
@@ -31,6 +39,7 @@ const Login = () => {
        
         
         signIn(values).subscribe(res=> {
+            isLoggedIn().next(true);
             SetLoading(false)
             if(values.remember){
                 localStorage.setItem("credentials", JSON.stringify(values));
@@ -38,10 +47,13 @@ const Login = () => {
                 localStorage.removeItem("credentials");
             }    
             
+            props.dispatch({ type: 'SET_LOGIN', payload: res.response });   
+            
             localStorage.setItem("token", JSON.stringify(res.response));
 
             history.replace('/home');
           }, error=>{
+            isLoggedIn().next(false);
             SetLoading(false)
             message.error('Sorry login credential was wrong');
           })
@@ -90,4 +102,6 @@ onFinishFailed={onFinishFailed}
 </Form>);
 };
 
+
+const Login = connect(mapStateToProps)(LoginComponent);
 export default Login;

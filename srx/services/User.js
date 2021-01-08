@@ -1,8 +1,10 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 import { ajax } from 'rxjs/ajax';
 import { map, catchError, tap } from 'rxjs/operators';
-import { of, throwError } from 'rxjs';
+import { BehaviorSubject, of, throwError } from 'rxjs';
 import config from '../Config/config';
+
+export const isLoggedIn = () =>new BehaviorSubject(null)
 
 export const signIn = (values) => ajax({
     url: `${config.apiUrl}/oauth/token`,

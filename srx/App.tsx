@@ -3,12 +3,11 @@ import * as React from 'react';
 import { hot } from 'react-hot-loader';
 import { Layout } from 'antd';
 import 'antd/dist/antd.css'; 
-import {
-    BrowserRouter ,
-    Switch,
-    Route,
-    Link
-  } from "react-router-dom";
+import {  BrowserRouter } from "react-router-dom";
+
+
+import { Provider } from 'react-redux'
+import store from './store'
 
 import MyHeader from './Layout/Header/MyHeader';
 import MyFooter from './Layout/Footer/MyFooter';
@@ -17,7 +16,8 @@ import MyRouters from './Routers/MyRouters';
 const App = () => {    
     const { Header, Footer,  Content } = Layout;
 
-    return (<Layout className="layout">
+    return ( <Provider store={store}>
+        <Layout className="layout">
             <Header>
                 
                 <MyHeader />
@@ -32,7 +32,7 @@ const App = () => {
                 <Footer style={{ textAlign: 'center' }}>
                     <MyFooter></MyFooter>
                 </Footer>            
-        </Layout>);
+        </Layout></Provider>);
 };
 
 //export default App;
