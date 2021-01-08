@@ -3,7 +3,12 @@ import * as React from 'react';
 import { hot } from 'react-hot-loader';
 import { Layout } from 'antd';
 import 'antd/dist/antd.css'; 
-
+import {
+    BrowserRouter ,
+    Switch,
+    Route,
+    Link
+  } from "react-router-dom";
 
 import MyHeader from './Layout/Header/MyHeader';
 import MyFooter from './Layout/Footer/MyFooter';
@@ -18,9 +23,11 @@ const App = () => {
                 <MyHeader />
             </Header>
             <Content style={{ padding: '0 50px' }}>                
-                <div className="site-layout-content">
-                    <Login />
-                </div>
+                <BrowserRouter  >
+                    <div className="site-layout-content">
+                        <Login />
+                    </div>                    
+                </BrowserRouter >
                 </Content>
                 <Footer style={{ textAlign: 'center' }}>
                     <MyFooter></MyFooter>

@@ -2,6 +2,10 @@ import * as React from 'react';
 
 import { Form, Input, Button, Checkbox } from 'antd';
 
+import { ajax } from 'rxjs/ajax';
+import { map, catchError } from 'rxjs/operators';
+import { of } from 'rxjs';
+
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 const Login = () => {
 
@@ -15,6 +19,16 @@ const Login = () => {
 
     
     const onFinish = (values: any) => {
+
+        const obs$ = ajax.getJSON(`https://api.github.com/users?per_page=5`).pipe(
+            map(userResponse => console.log('users: ', userResponse)),
+            catchError(error => {
+                console.log('error: ', error);
+                return of(error);
+            })
+            );
+            obs$.subscribe(res=> console.log(res))
+
         console.log('Success:', true);
     };
 

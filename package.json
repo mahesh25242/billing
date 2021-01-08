@@ -86,10 +86,13 @@
   "dependencies": {
     "@types/react-dom": "^17.0.0",
     "@types/react-router": "^5.1.10",
+    "@types/react-router-dom": "^5.1.7",
     "antd": "^4.10.0",
     "electron-squirrel-startup": "^1.0.0",
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
-    "react-hot-loader": "^4.13.0"
+    "react-hot-loader": "^4.13.0",
+    "react-router-dom": "^5.2.0",
+    "rxjs": "^6.6.3"
   }
 }
