@@ -1,14 +1,22 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import * as React from 'react';
+import { useHistory } from 'react-router-dom';
 
-import { Form, Input, Button, Checkbox } from 'antd';
+
+import { Form, Input, Button, Checkbox, message } from 'antd';
 
 import { ajax } from 'rxjs/ajax';
 import { map, catchError } from 'rxjs/operators';
 import { of } from 'rxjs';
 
+import config from '../../Config/config';
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 const Login = () => {
+    const history = useHistory();
 
+    let storageCredentials = localStorage.getItem("credentials");    
+    let credentials = (storageCredentials) ?  JSON.parse(storageCredentials) : {};
+    
     const layout = {
         labelCol: { span: 8 },
         wrapperCol: { span: 16 },
@@ -19,17 +27,39 @@ const Login = () => {
 
     
     const onFinish = (values: any) => {
+        
 
-        const obs$ = ajax.getJSON(`https://api.github.com/users?per_page=5`).pipe(
-            map(userResponse => console.log('users: ', userResponse)),
+        const users$ = ajax({
+            url: 'http://localhost/cart/api/public/v1/oauth/token',
+            method: 'POST',
+            headers: config.ajax.header,
+            body: {                 
+                ...config.ajax.signBody,
+                ...{ 
+                    "password":values.password,    
+                    "username":values.username,
+                }
+            }
+          }).pipe(            
             catchError(error => {
-                console.log('error: ', error);
-                return of(error);
-            })
-            );
-            obs$.subscribe(res=> console.log(res))
+                message.error('Sorry login credential was wrong');
 
-        console.log('Success:', true);
+              console.log('error: ', error);
+              return of(error);
+            })
+          );
+
+          
+        
+          users$.subscribe(res=> {
+            if(values.remember){
+                localStorage.setItem("credentials", JSON.stringify(values));
+            }else{
+                localStorage.removeItem("credentials");
+            }              
+            history.push('/home');
+          })
+        
     };
 
     const onFinishFailed = (errorInfo: any) => {
@@ -41,7 +71,7 @@ return (<Form
 {...layout}
 style={{ margin: '16px 0' }}
 name="basic"
-initialValues={{ remember: true }}
+initialValues={{ ...credentials, remember: true }}
 onFinish={onFinish}
 onFinishFailed={onFinishFailed}
 >

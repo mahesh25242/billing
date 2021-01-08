@@ -15,6 +15,7 @@ import MyFooter from './Layout/Footer/MyFooter';
 import Login from './components/Login/Login';
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 const App = () => {
+    console.log(process.env)
     const { Header, Footer,  Content } = Layout;
 
     return (<Layout className="layout">
