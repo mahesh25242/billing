@@ -1,7 +1,7 @@
 /* eslint-disable import/no-duplicates */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import React, { useEffect, useState} from 'react';
-import { useHistory } from 'react-router-dom';
+import { Redirect, useHistory } from 'react-router-dom';
 
 import { Link } from "react-router-dom";
 
@@ -64,42 +64,48 @@ const LoginComponent = (props : any) => {
         console.log('Failed:', errorInfo);
     };
 
+if(props.token.access_token){
+    return ( <Redirect
+        to="/home"
+      />)
+}else{
+    return (<Form
+        {...layout}
+        style={{ margin: '16px 0' }}
+        name="basic"
+        initialValues={{ ...credentials, remember: true }}
+        onFinish={onFinish}
+        onFinishFailed={onFinishFailed}
+        >
+            <Form.Item
+            label="Username"
+            name="username"
+            rules={[{ required: true, message: 'Please input your username!' }]}
+            >
+                <Input autoFocus={true} placeholder="Please enter username" />
+            </Form.Item>
+        
+            <Form.Item
+            label="Password"
+            name="password"
+            rules={[{ required: true, message: 'Please input your password!' }]}
+            >
+                <Input.Password placeholder="Please enter password" />
+            </Form.Item>
+        
+            <Form.Item {...tailLayout} name="remember" valuePropName="checked">
+            <Checkbox>Remember me</Checkbox>
+            </Form.Item>
+        
+            <Form.Item {...tailLayout}>
+                <Button type="primary" htmlType="submit" loading={loading}>
+                    Sign In
+                </Button>
+            </Form.Item>
+            <Link to="/forgotPassword">Forgot password</Link>
+        </Form>);
+}
 
-return (<Form
-{...layout}
-style={{ margin: '16px 0' }}
-name="basic"
-initialValues={{ ...credentials, remember: true }}
-onFinish={onFinish}
-onFinishFailed={onFinishFailed}
->
-    <Form.Item
-    label="Username"
-    name="username"
-    rules={[{ required: true, message: 'Please input your username!' }]}
-    >
-        <Input autoFocus={true} placeholder="Please enter username" />
-    </Form.Item>
-
-    <Form.Item
-    label="Password"
-    name="password"
-    rules={[{ required: true, message: 'Please input your password!' }]}
-    >
-        <Input.Password placeholder="Please enter password" />
-    </Form.Item>
-
-    <Form.Item {...tailLayout} name="remember" valuePropName="checked">
-    <Checkbox>Remember me</Checkbox>
-    </Form.Item>
-
-    <Form.Item {...tailLayout}>
-        <Button type="primary" htmlType="submit" loading={loading}>
-            Sign In
-        </Button>
-    </Form.Item>
-    <Link to="/forgotPassword">Forgot password</Link>
-</Form>);
 };
 
 

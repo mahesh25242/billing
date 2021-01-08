@@ -18,17 +18,19 @@ const App = () => {
 
     return ( <Provider store={store}>
         <Layout className="layout">
-            <Header>
+            <BrowserRouter  >
+                <Header>
+                    
+                    <MyHeader />
+                </Header>
+                <Content style={{ padding: '0 50px' }}>                
                 
-                <MyHeader />
-            </Header>
-            <Content style={{ padding: '0 50px' }}>                
-                <BrowserRouter  >
                     <div className="site-layout-content">
                         <MyRouters />
                     </div>                    
-                </BrowserRouter >
+               
                 </Content>
+                </BrowserRouter >
                 <Footer style={{ textAlign: 'center' }}>
                     <MyFooter></MyFooter>
                 </Footer>            

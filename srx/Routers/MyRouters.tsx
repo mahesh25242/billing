@@ -11,6 +11,8 @@ import {
 import Home from '../Pages/Home/Home';
 import Login from '../Pages/Login/Login';
 import ForgotPassword from '../Pages/ForgotPassword/ForgotPassword';
+import Products from '../Pages/Products/Products';
+
 import { connect } from "react-redux";
 
 const mapStateToProps = (state: { token: any;  }) => {
@@ -22,12 +24,15 @@ const MyRouters = () => {
     return (<> <HashRouter>
         <Route path="/" exact>
           <Login />
-        </Route>
+        </Route>      
         <Route path="/forgotPassword">
           <ForgotPassword />
         </Route>
         <PrivateRoute path="/home">
           <Home />
+        </PrivateRoute>        
+        <PrivateRoute path="/products">
+          <Products />
         </PrivateRoute>        
       </HashRouter></>);
 }
@@ -56,5 +61,6 @@ const PrivateRouteFn:React.FC<any>   = ({ children, ...rest }) => {
 }
 
 const PrivateRoute = connect(mapStateToProps)(PrivateRouteFn);
+
 
 export default MyRouters;
