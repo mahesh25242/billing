@@ -3,7 +3,7 @@ import * as React from 'react';
 import { hot } from 'react-hot-loader';
 import { Layout } from 'antd';
 import 'antd/dist/antd.css'; 
-import {  BrowserRouter } from "react-router-dom";
+import {  HashRouter } from "react-router-dom";
 
 
 import { Provider } from 'react-redux'
@@ -18,7 +18,7 @@ const App = () => {
 
     return ( <Provider store={store}>
         <Layout className="layout">
-            <BrowserRouter  >
+            <HashRouter  >
                 <Header>
                     
                     <MyHeader />
@@ -30,7 +30,7 @@ const App = () => {
                     </div>                    
                
                 </Content>
-                </BrowserRouter >
+                </HashRouter >
                 <Footer style={{ textAlign: 'center' }}>
                     <MyFooter></MyFooter>
                 </Footer>            

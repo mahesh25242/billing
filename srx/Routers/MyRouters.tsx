@@ -4,7 +4,8 @@ import React, { useEffect, useState } from "react";
 import {    
   HashRouter,
   Redirect,
-    Route    
+    Route   ,
+    Switch 
   } from "react-router-dom";
 
 
@@ -21,20 +22,20 @@ const mapStateToProps = (state: { token: any;  }) => {
 
 
 const MyRouters = () => {
-    return (<> <HashRouter>
+    return (<> <Switch>
         <Route path="/" exact>
           <Login />
         </Route>      
-        <Route path="/forgotPassword">
+        <Route path="/forgotPassword" exact>
           <ForgotPassword />
         </Route>
-        <PrivateRoute path="/home">
+        <PrivateRoute path="/home" exact>
           <Home />
         </PrivateRoute>        
-        <PrivateRoute path="/products">
+        <Route path="/products" exact>
           <Products />
-        </PrivateRoute>        
-      </HashRouter></>);
+        </Route>        
+      </Switch></>);
 }
 
 const PrivateRouteFn:React.FC<any>   = ({ children, ...rest }) => {
