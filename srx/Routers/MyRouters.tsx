@@ -32,9 +32,9 @@ const MyRouters = () => {
         <PrivateRoute path="/home" exact>
           <Home />
         </PrivateRoute>        
-        <Route path="/products" exact>
+        <PrivateRoute path="/products" exact>
           <Products />
-        </Route>        
+        </PrivateRoute>        
       </Switch></>);
 }
 
@@ -44,8 +44,8 @@ const PrivateRouteFn:React.FC<any>   = ({ children, ...rest }) => {
     <Route
       {...rest}
       render={({ location }) =>
-      {        
-        return rest.token.access_token ? (
+      {                
+        return rest.token && rest.token.access_token ? (
           children
         ) : (
           <Redirect

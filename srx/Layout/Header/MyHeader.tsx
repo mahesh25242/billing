@@ -20,7 +20,7 @@ const MyHeaderComponent = (props: any) => {
     return (<>
     <div className="logo" />
     {
-        props.token.access_token && 
+        props.token && props.token.access_token && 
         <MainMenu />
     }    
     </>)

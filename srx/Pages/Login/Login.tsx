@@ -64,11 +64,7 @@ const LoginComponent = (props : any) => {
         console.log('Failed:', errorInfo);
     };
 
-if(props.token.access_token){
-    return ( <Redirect
-        to="/home"
-      />)
-}else{
+
     return (<Form
         {...layout}
         style={{ margin: '16px 0' }}
@@ -104,7 +100,7 @@ if(props.token.access_token){
             </Form.Item>
             <Link to="/forgotPassword">Forgot password</Link>
         </Form>);
-}
+
 
 };
 
