@@ -4,9 +4,14 @@ import { map, catchError, tap } from 'rxjs/operators';
 import { BehaviorSubject, of, throwError } from 'rxjs';
 import config from '../Config/config';
 
-export const isLoggedIn = () =>new BehaviorSubject(null)
+export class UserService {
+ 
+  isLoggedIn() {
+    return new BehaviorSubject(null)
+  }
 
-export const signIn = (values) => ajax({
+ signIn (values) {
+  return ajax({
     url: `${config.apiUrl}/oauth/token`,
     method: 'POST',
     headers: config.ajax.header,
@@ -22,3 +27,5 @@ export const signIn = (values) => ajax({
       return throwError(error);
     })
   );
+ } 
+}

@@ -6,7 +6,7 @@ import { Redirect, useHistory } from 'react-router-dom';
 import { Link } from "react-router-dom";
 
 import { Form, Input, Button, Checkbox, message } from 'antd';
-import { signIn, isLoggedIn } from '../../services';
+import { UserService } from '../../services';
 import { connect } from "react-redux";
 
 
@@ -16,6 +16,8 @@ const mapStateToProps = (state: { token: any;  }) => {
 
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 const LoginComponent = (props : any) => {
+    const userService = new UserService();
+
     const history = useHistory();
     const [loading, SetLoading ] = useState(false);
     const storageCredentials = localStorage.getItem("credentials");    
@@ -38,8 +40,8 @@ const LoginComponent = (props : any) => {
         SetLoading(true);
        
         
-        signIn(values).subscribe(res=> {
-            isLoggedIn().next(true);
+        userService.signIn(values).subscribe(res=> {
+          //  userService.isLoggedIn().next(true);
             SetLoading(false)
             if(values.remember){
                 localStorage.setItem("credentials", JSON.stringify(values));
@@ -53,7 +55,7 @@ const LoginComponent = (props : any) => {
 
             history.replace('/home');
           }, error=>{
-            isLoggedIn().next(false);
+           // userService.isLoggedIn().next(false);
             SetLoading(false)
             message.error('Sorry login credential was wrong');
           })
@@ -64,7 +66,11 @@ const LoginComponent = (props : any) => {
         console.log('Failed:', errorInfo);
     };
 
-
+    if(props.token && props.token.access_token){
+        return ( <Redirect
+            to="/home"
+          />)
+    }else{
     return (<Form
         {...layout}
         style={{ margin: '16px 0' }}
@@ -100,7 +106,7 @@ const LoginComponent = (props : any) => {
             </Form.Item>
             <Link to="/forgotPassword">Forgot password</Link>
         </Form>);
-
+    }
 
 };
 
