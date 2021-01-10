@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 import * as React from 'react';
 import { ProductService } from '../../services';
-import { Table } from 'antd';
+import { Button, PageHeader, Table } from 'antd';
 
 const Products = () => {
     const productService = new ProductService();
@@ -20,17 +20,31 @@ const Products = () => {
         {
           title: 'Name',
           dataIndex: 'name',
-          key: 'name',
+          key: 'id',
+          ellipsis: true,
+          render: (text: string, record, index) => <a>{text}</a>,
         },
         {
-          title: 'Description',
-          dataIndex: 'description',
-          key: 'description',
+          title: 'Status',
+          dataIndex: 'status_text',
+          key: 'status_text',
         },
         {
           title: 'Created At',
           dataIndex: 'created_at',
           key: 'created_at',
+        },
+        {
+          title: 'Varients',
+          dataIndex: 'shop_product_variant',
+          key: 'shop_product_variant',
+          render: (text: string, record:any, index) => <a>{record.shop_product_variant.length} </a>,
+        },
+        {
+          title: 'Options',
+          dataIndex: 'id',
+          key: 'id',
+          render: (text: string, record, index) => <a>Delete</a>,
         },
       ];
       
@@ -38,7 +52,18 @@ const Products = () => {
 
     console.log(products)
     return (<>
-       products &&   <Table dataSource={products} columns={columns} />
+      <PageHeader
+        className="site-page-header"        
+        title="Products"
+        subTitle="List all products"
+        extra={[
+          <Button key="1">Create New Product</Button>,          
+        ]}
+      />
+       {
+       products &&   <Table dataSource={products} 
+       columns={columns}  rowKey="id" scroll={{ y: 400 }} />
+      }
     </>);
 };
 
