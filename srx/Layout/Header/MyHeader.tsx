@@ -1,6 +1,6 @@
 /* eslint-disable import/no-unresolved */
 import React, { useEffect } from 'react';
-import MainMenu from '../../SharedComponents/MainMenu';
+import { MainMenu } from '../../SharedComponents';
 import { connect } from "react-redux";
 
 const mapStateToProps = (state: { token: any;  }) => {

@@ -13,6 +13,7 @@ import Home from '../Pages/Home/Home';
 import Login from '../Pages/Login/Login';
 import ForgotPassword from '../Pages/ForgotPassword/ForgotPassword';
 import Products from '../Pages/Products/Products';
+import Billing from '../Pages/Billing/Billing';
 
 import { connect } from "react-redux";
 
@@ -26,14 +27,17 @@ const MyRouters = () => {
         <Route path="/" exact>
           <Login />
         </Route>      
-        <Route path="/forgotPassword" exact>
+        <Route path="/forgotPassword">
           <ForgotPassword />
         </Route>
-        <PrivateRoute path="/home" exact>
+        <PrivateRoute path="/home">
           <Home />
         </PrivateRoute>        
-        <PrivateRoute path="/products" exact>
+        <PrivateRoute path="/products">
           <Products />
+        </PrivateRoute>        
+        <PrivateRoute path="/billing">
+          <Billing />
         </PrivateRoute>        
       </Switch></>);
 }
