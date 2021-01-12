@@ -15,8 +15,8 @@ const Billing:React.FC = () => {
 
     React.useEffect(() => {
         const prodSubscr = productService.products().subscribe(res=>{
-            SetProducts(res.response.data);
-        })
+          SetProducts(res.response.data);
+        });
 
         return () => {
           prodSubscr.unsubscribe();
@@ -47,7 +47,7 @@ const Billing:React.FC = () => {
           title: 'Varients',
           dataIndex: 'shop_product_variant',
           key: 'shop_product_variant',
-          render: (text: string, record:any, index:number) => <a>{record.shop_product_variant.length} </a>,
+          render: (text: string, record:any, index:number) => <a>{ record.shop_product_variant && record.shop_product_variant.length} </a>,
         },
         {
           title: 'Options',
@@ -69,16 +69,17 @@ const Billing:React.FC = () => {
       
       const handleSearch = (value: string) => {
         let res: string[] = [];
-        if (!value || value.indexOf('@') >= 0) {
+        if (!value) {
           res = [];
-        } else {
-          res = ['gmail.com', '163.com', 'qq.com'].map(domain => `${value}@${domain}`);
-        }
-        SetProducts(res);
+        }         
+        SetProducts(products);
       };
       
+      const handleSelect = (value: any, option:any) => {
+        console.log(value, option)
+      }
 
-    console.log(products)
+    
     return (<>
       <PageHeader
         className="site-page-header"        
@@ -99,9 +100,12 @@ const Billing:React.FC = () => {
             <Form.Item
             label="Product"
             name="product"
-            rules={[{ required: true, message: 'Please input your username!' }]}
+            rules={[{ required: true, message: 'Please enter a product!' }]}
           >
-            <AutoComplete style={{ width: 200 }} onSearch={handleSearch} placeholder="input here">
+            <AutoComplete style={{ width: 200 }} 
+            onSearch={handleSearch} 
+            placeholder="Enter the product here" 
+            onSelect={handleSelect}>
             {products && products.map((product: any) => (
               <Option key={product.id} value={product.name}>
                 {product.name}
