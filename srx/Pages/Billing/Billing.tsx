@@ -4,10 +4,14 @@ import { ProductService } from '../../services';
 import { Button, Form, Input, PageHeader, Table } from 'antd';
 import { Row, Col } from 'antd';
 import { Link } from 'react-router-dom';
+import { AutoComplete } from 'antd';
 
-const Billing = () => {
+const { Option } = AutoComplete;
+
+
+const Billing:React.FC = () => {
     const productService = new ProductService();
-    const [products, SetProducts] = React.useState(null);
+    const [products, SetProducts] = React.useState<any>(null);
 
     React.useEffect(() => {
         const prodSubscr = productService.products().subscribe(res=>{
@@ -63,6 +67,16 @@ const Billing = () => {
       };
 
       
+      const handleSearch = (value: string) => {
+        let res: string[] = [];
+        if (!value || value.indexOf('@') >= 0) {
+          res = [];
+        } else {
+          res = ['gmail.com', '163.com', 'qq.com'].map(domain => `${value}@${domain}`);
+        }
+        SetProducts(res);
+      };
+      
 
     console.log(products)
     return (<>
@@ -87,7 +101,13 @@ const Billing = () => {
             name="product"
             rules={[{ required: true, message: 'Please input your username!' }]}
           >
-            <Input />
+            <AutoComplete style={{ width: 200 }} onSearch={handleSearch} placeholder="input here">
+            {products && products.map((product: any) => (
+              <Option key={product.id} value={product.name}>
+                {product.name}
+              </Option>
+            ))}
+          </AutoComplete>
           </Form.Item>
         </Col>
       </Row>

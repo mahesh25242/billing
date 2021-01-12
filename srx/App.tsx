@@ -14,15 +14,12 @@ import MyFooter from './Layout/Footer/MyFooter';
 import MyRouters from './Routers/MyRouters';
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 const App = () => {    
-    const { Header, Footer,  Content } = Layout;
+    const { Footer,  Content } = Layout;
 
     return ( <Provider store={store}>
         <Layout className="layout">
             <HashRouter  >
-                <Header>
-                    
-                    <MyHeader />
-                </Header>
+                <MyHeader />
                 <Content style={{ padding: '0 50px' }}>                
                 
                     <div className="site-layout-content">
