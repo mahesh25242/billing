@@ -24,7 +24,20 @@ export const EditProduct = (props: any) =>{
           <Button key="1"><Link to="/products">Back To List Products</Link></Button>,          
         ]}
       />
-      <MyBreadcrumb />
+      <MyBreadcrumb items={[
+          {
+            name: 'Home',
+            to: '/'
+          },
+          {
+            name: 'Products',
+            to: '/products'            
+          },
+          {
+            name: 'Create Or Edit Product',
+            to: '/products/create'            
+          }
+        ]}/>
     {id}          
          <a>asassas</a>
     </>;

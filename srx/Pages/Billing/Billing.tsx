@@ -134,13 +134,15 @@ const Billing:React.FC = () => {
         onFinishFailed={onFinishFailed}
       >
       <Row>
-        <Col span={ (product && product.shop_product_variant)  ? 12 : 24 }>
+        <Col span={ (product && product.shop_product_variant && product.shop_product_variant.length > 1)  ? 12 : 24 }>
             <Form.Item
             label="Product"
             name="product"
             rules={[{ required: true, message: 'Please enter a product!' }]}
           >
             <AutoComplete  
+            autoFocus
+            size="large" 
             allowClear
             onSearch={handleSearch} 
             placeholder="Enter the product here" 
@@ -162,6 +164,7 @@ const Billing:React.FC = () => {
             rules={[{ required: true, message: 'Please choose a varient!' }]}
             >
               <Select
+              size="large" 
                 showSearch  
                 allowClear          
                 placeholder="Select a Varient"
@@ -182,23 +185,26 @@ const Billing:React.FC = () => {
         }
         
       </Row>
+      {
+          product && product.shop_product_variant && 
       <Row>
-        <Col span="4">
+        <Col span="12">
           <Form.Item label="Quantity"
           name="quantity" 
           rules={[{ required: true, message: 'Please enter quantity' }]}>
-            <InputNumber />
-          </Form.Item>
-
+            <InputNumber size="large" />
+          </Form.Item>                    
+        </Col>
+        <Col span="12">
           <Form.Item name="message" label="Message">
-            <Input.TextArea />
+            <Input.TextArea showCount maxLength={250} size="large" />
           </Form.Item>
-          
         </Col>
       </Row>
+      }
       <Form.Item>
           <Button type="primary" htmlType="submit" loading={false}>
-              Save & Print
+            Add
           </Button>
       </Form.Item>
 

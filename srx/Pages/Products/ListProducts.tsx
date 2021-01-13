@@ -72,7 +72,15 @@ const ListProducts = () => {
           <Button key="1"><Link to={`${path}/create/`}>Create New Product</Link></Button>,          
         ]}
       />
-        <MyBreadcrumb/>
+        <MyBreadcrumb items={[
+          {
+            name: 'Home',
+            to: '/'
+          },
+          {
+            name: 'Products'            
+          }
+        ]}/>
        {
        products &&   <Table dataSource={products} 
        columns={columns}  rowKey="id" scroll={{ y: 400 }} />
