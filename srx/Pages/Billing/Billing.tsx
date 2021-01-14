@@ -93,6 +93,14 @@ const Billing:React.FC = () => {
         console.log('search:', val);
       }
 
+      const selectedProduct = (product:any) =>{
+        setProduct(product);
+        form.setFieldsValue({
+          varient: product && product.shop_product_primary_variant.id
+        });
+    
+
+      }
       console.log(product)
     
     return (<>
@@ -116,7 +124,7 @@ const Billing:React.FC = () => {
             
             <ProductAutoSuggest products={products} 
            // form={form}
-            setProduct={setProduct}></ProductAutoSuggest>
+            setProduct={selectedProduct}></ProductAutoSuggest>
           
         </Col>
         {
