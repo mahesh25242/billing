@@ -1,3 +1,4 @@
+/* eslint-disable import/no-unresolved */
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 import * as React from 'react';
 import { ProductService } from '../../services';
@@ -5,6 +6,7 @@ import { Button, Form, Input, InputNumber, PageHeader, Select, Table } from 'ant
 import { Row, Col } from 'antd';
 import { Link } from 'react-router-dom';
 import { AutoComplete } from 'antd';
+import { ProductAutoSuggest } from './components';
 
 const { Option } = AutoComplete;
 
@@ -12,15 +14,13 @@ const { Option } = AutoComplete;
 const Billing:React.FC = () => {
     const productService = new ProductService();
     const [products, setProducts] = React.useState<any>(null);
-    const [options, setOptions] = React.useState<any>(null);
     const [product, setProduct] = React.useState<any>(null);
     
     const [form] = Form.useForm();
 
     React.useEffect(() => {
         const prodSubscr = productService.products().subscribe(res=>{
-          setProducts(res.response.data);      
-          setOptions(options);                      
+          setProducts(res.response.data);                    
         });
 
         return () => {
@@ -73,31 +73,9 @@ const Billing:React.FC = () => {
       };
 
       
-      const handleSearch = (value: string) => {
-        let res: string[] = [];
-        if (!value) {
-          res = [];
-        }      
-        
-        if(products)
-          res = products.filter( (option:any) => option.name.toUpperCase().indexOf(value.toUpperCase()) !== -1);
 
-              
-        
-          setOptions(res);
-      };
       
-      const handleSelect = (value: any, option:any) => {
-        const res = products.filter( (product:any) => product.id == option.key );
-        
-
-        setProduct(res[0]); 
-        
-        form.setFieldsValue({
-          varient: res[0] && res[0].shop_product_primary_variant.id
-        });
-    
-      }
+     
 
       function onChange(value: any) {
         console.log(`selected ${value}`);
@@ -135,25 +113,11 @@ const Billing:React.FC = () => {
       >
       <Row>
         <Col span={ (product && product.shop_product_variant && product.shop_product_variant.length > 1)  ? 12 : 24 }>
-            <Form.Item
-            label="Product"
-            name="product"
-            rules={[{ required: true, message: 'Please enter a product!' }]}
-          >
-            <AutoComplete  
-            autoFocus
-            size="large" 
-            allowClear
-            onSearch={handleSearch} 
-            placeholder="Enter the product here" 
-            onSelect={handleSelect}>
-            {options && options.map((option: any) => (
-              <Option key={option.id} value={option.name}>
-                {option.name}
-              </Option>
-            ))}
-          </AutoComplete>
-          </Form.Item>
+            
+            <ProductAutoSuggest products={products} 
+           // form={form}
+            setProduct={setProduct}></ProductAutoSuggest>
+          
         </Col>
         {
           product && product.shop_product_variant && product.shop_product_variant.length > 1 && 
