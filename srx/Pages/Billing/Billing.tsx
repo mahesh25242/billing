@@ -11,8 +11,8 @@ import { connect } from 'react-redux';
 
 const { Option } = AutoComplete;
 
-const mapStateToProps = (state: { product: any;  }) => {
-  return { product: state.product };
+const mapStateToProps = (state: { product: any, cart: any;  }) => {
+  return { product: state.product, cart: state.cart };
 };
 
 const BillingComponent:React.FC = (props:any) => {
@@ -71,9 +71,10 @@ const BillingComponent:React.FC = (props:any) => {
 
 
       
-      const onFinish = (values: any) => {
-        console.log(props.product)
+      const onFinish = (values: any) => {        
+        props.dispatch({ type: 'CART_PRODUCTS', payload: props.product});                
         console.log('Success:', values);
+        console.log(props)
       };
     
       const onFinishFailed = (errorInfo: any) => {
