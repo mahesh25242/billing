@@ -7,18 +7,23 @@ import { Row, Col } from 'antd';
 import { Link } from 'react-router-dom';
 import { AutoComplete } from 'antd';
 import { ProductAutoSuggest } from './components';
+import { connect } from 'react-redux';
 
 const { Option } = AutoComplete;
 
+const mapStateToProps = (state: { product: any;  }) => {
+  return { product: state.product };
+};
 
-const Billing:React.FC = () => {
+const BillingComponent:React.FC = (props:any) => {
     const productService = new ProductService();
     const [products, setProducts] = React.useState<any>(null);
     const [product, setProduct] = React.useState<any>(null);
     
     const [form] = Form.useForm();
-
+    
     React.useEffect(() => {
+        
         const prodSubscr = productService.products().subscribe(res=>{
           setProducts(res.response.data);                    
         });
@@ -63,8 +68,11 @@ const Billing:React.FC = () => {
         },
       ];
       
+
+
       
       const onFinish = (values: any) => {
+        console.log(props.product)
         console.log('Success:', values);
       };
     
@@ -75,10 +83,22 @@ const Billing:React.FC = () => {
       
 
       
-     
+     console.log(props)
 
-      function onChange(value: any) {
-        console.log(`selected ${value}`);
+      const chooseVarient = (value: any) => {
+        let varient:any;
+        if(value){
+          varient = props.product.shop_product_variant.filter( (varnt:any) => varnt.id == value);
+        }
+
+       // form.getFieldValue();
+        varient = varient[0];
+        varient = {...varient, quantity: 1};
+
+        props.dispatch({ type: 'CHOOSE_PRODUCT', payload: {...props.product, ...{selectedVarient: varient }} });                
+        form.setFieldsValue({
+          quantity: 1
+        })      
       }
       
       function onBlur() {
@@ -90,18 +110,13 @@ const Billing:React.FC = () => {
       }
       
       function onSearch(val: any) {
+        
         console.log('search:', val);
       }
 
-      const selectedProduct = (product:any) =>{
-        setProduct(product);
-        form.setFieldsValue({
-          varient: product && product.shop_product_primary_variant.id
-        });
-    
-
-      }
-      console.log(product)
+      
+      
+      
     
     return (<>
       <PageHeader
@@ -115,33 +130,34 @@ const Billing:React.FC = () => {
       <Form  
         form={form}       
         name="basic"
-        initialValues={{ quantity: 1 }}
+        initialValues={{  }}
         onFinish={onFinish}
         onFinishFailed={onFinishFailed}
       >
       <Row>
-        <Col span={ (product && product.shop_product_variant && product.shop_product_variant.length > 1)  ? 12 : 24 }>
+        <Col span={ (props.product && props.product.shop_product_variant && props.product.shop_product_variant.length > 1)  ? 12 : 24 }>
             
             <ProductAutoSuggest products={products} 
            // form={form}
-            setProduct={selectedProduct}></ProductAutoSuggest>
-          
+            ></ProductAutoSuggest>          
         </Col>
         {
-          product && product.shop_product_variant && product.shop_product_variant.length > 1 && 
+          props.product && props.product.shop_product_variant && props.product.shop_product_variant.length > 1 && 
           <Col span={12}>
             <Form.Item
             label="Varient"
             name="varient"
             rules={[{ required: true, message: 'Please choose a varient!' }]}
+            initialValue={props.product.selectedVarient.id}
             >
               <Select
               size="large" 
                 showSearch  
-                allowClear          
+                allowClear   
+                
                 placeholder="Select a Varient"
                 optionFilterProp="children"
-                onChange={onChange}
+                onChange={chooseVarient}
                 onFocus={onFocus}
                 onBlur={onBlur}
                 onSearch={onSearch}
@@ -149,7 +165,7 @@ const Billing:React.FC = () => {
                   option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
                 }
               >{
-                product.shop_product_variant.map((spv: any) => <Option key={spv.id} value={spv.id}>{spv.name}</Option>)
+                props.product.shop_product_variant.map((spv: any) => <Option key={spv.id} value={spv.id}>{spv.name}</Option>)
               }            
               </Select>
             </Form.Item>
@@ -158,15 +174,29 @@ const Billing:React.FC = () => {
         
       </Row>
       {
-          product && product.shop_product_variant && 
+          props.product && props.product.selectedVarient && 
       <Row>
-        <Col span="12">
+        <Col span="4">
           <Form.Item label="Quantity"
           name="quantity" 
-          rules={[{ required: true, message: 'Please enter quantity' }]}>
-            <InputNumber size="large" />
+          rules={[{ required: true, message: 'Please enter quantity' }]}
+          initialValue={props.product.selectedVarient.quantity}>
+            <InputNumber size="large" onChange={(evt) => {
+              props.dispatch({ type: 'CHOOSE_PRODUCT', payload: {...props.product, ...{selectedVarient: { ...props.product.selectedVarient, ...{quantity: evt}  } }} });                
+            }}/>
           </Form.Item>                    
         </Col>
+        
+        
+          <Col span="4">
+            {props.product.selectedVarient.type.name}
+          </Col>
+          <Col span="4">          
+          ₹ {props.product.selectedVarient.quantity * props.product.selectedVarient.price}
+          </Col>
+        
+       
+        
         <Col span="12">
           <Form.Item name="message" label="Message">
             <Input.TextArea showCount maxLength={250} size="large" />
@@ -175,17 +205,17 @@ const Billing:React.FC = () => {
       </Row>
       }
       <Form.Item>
-          <Button type="primary" htmlType="submit" loading={false}>
-            Add
+          <Button type="primary" htmlType="submit" loading={false} disabled={!props.product || !props.product.selectedVarient || props.product.selectedVarient.quantity <=0 }>
+            Add             
           </Button>
       </Form.Item>
 
       </Form>
-       {
-       products &&   <Table dataSource={products} 
-       columns={columns}  rowKey="id" scroll={{ y: 400 }} loading={products === null} />
-      }
+       
     </>);
 };
 
+
+const Billing = connect(mapStateToProps)(BillingComponent);
 export default Billing;
+

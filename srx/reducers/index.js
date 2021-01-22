@@ -1,10 +1,12 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { SET_LOGIN, REMOVE_LOGIN } from "../constants/action-types";
+import { SET_LOGIN, REMOVE_LOGIN, 
+CHOOSE_PRODUCT } from "../constants/action-types";
 
 
 const initialState = {
-    token: {},    
+    token: {}, 
+    product: {}   
   };
   
   const  rootReducer = (state = initialState, action) => {
@@ -17,7 +19,12 @@ const initialState = {
       return Object.assign({}, state, {
         token: action.payload
       });
-  }   
+    }   
+    if (action.type === CHOOSE_PRODUCT) {      
+      return Object.assign({}, state, {
+        product: {...state.product, ...action.payload}
+      });
+    }   
   
     return state;
   };

@@ -1,48 +1,56 @@
 import * as React from 'react';
 import { AutoComplete, Form, Select } from 'antd';
 import { FormInstance } from 'antd/lib/form';
+import { connect } from 'react-redux';
 
 const { Option } = AutoComplete;
 
-interface PAS {
-  products?: any,
-  //form?: FormInstance,
-  setProduct?: any
-}
+// interface PAS {
+//   products?: any,
+//   //form?: FormInstance,
+//   setProduct?: any,
+//   dispatch: any,
+//   product: any
+// }
 
+const mapStateToProps = (state: { product: any;  }) => {
+  return { product: state.product };
+};
 
-export const ProductAutoSuggest:React.FC<PAS> = (props: PAS) => {
-console.log(props)    
+const ProductAutoSuggestComponent:React.FC<any> = (props: any) => {
   const [options, setOptions] = React.useState<any>(null);
 
-  function onChange(value:any) {
+  const onChange = (value:any) => {
 
     const res = props.products.filter( (product:any) => product.id == value );
         
-
-    props.setProduct(res[0]);
+    const product = res[0] ?? null;
     
-    console.log(`selected ${value}`);
+    
+    if(product)
+      product.selectedVarient = {...product.shop_product_primary_variant, quantity: 1};    
+    props.dispatch({ type: 'CHOOSE_PRODUCT', payload: product });     
   }
   
-  function onBlur() {
-    console.log('blur');
+  const onBlur =() => {
+    //console.log('blur');
   }
   
-  function onFocus() {
-    console.log('focus');
+  const  onFocus = () => {
+    //console.log('focus');
   }
   
-  function onSearch(val:any) {
-    console.log('search:', val);
+  const onSearch = (val:any) => {
+    //console.log('search:', val);
   }
   
   
-    return (<Form.Item name="product" label="Product" rules={[{ required: true }]}>
+    return (<Form.Item name="product" label="Product" rules={[{ required: true }]} initialValue={props.product.id}>
     <Select
-      showSearch
+      autoFocus
+      showSearch      
       placeholder="Select a option and change input text above"
-      // onChange={onGenderChange}
+      // onChange={onGenderChange}      
       allowClear
       optionFilterProp="children"
       onChange={onChange}
@@ -61,3 +69,7 @@ console.log(props)
     </Select>
   </Form.Item>);
 }
+
+
+export const ProductAutoSuggest = connect(mapStateToProps)(ProductAutoSuggestComponent);
+
