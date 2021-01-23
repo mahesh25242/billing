@@ -32,10 +32,22 @@ const initialState = {
         });
       }      
     }   
-    if (action.type === CART_PRODUCTS) {      
-      return Object.assign({}, state, {
-        cart: [...state.cart, action.payload]
-      });
+    if (action.type === CART_PRODUCTS) {     
+        const product = state.cart.find(x => x.id === action.payload.id && x.selectedVarient.id == action.payload.selectedVarient.id)
+
+        if(product){
+          product.selectedVarient.quantity = product.selectedVarient.quantity + action.payload.selectedVarient.quantity;
+          return Object.assign({}, state, {
+            cart: [...state.cart]
+          });
+        }else{
+          return Object.assign({}, state, {
+            cart: [...state.cart, action.payload]
+          });
+        }
+          
+ 
+      
     }  
   
     return state;
