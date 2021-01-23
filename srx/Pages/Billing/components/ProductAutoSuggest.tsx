@@ -18,7 +18,6 @@ const mapStateToProps = (state: { product: any;  }) => {
 };
 
 const ProductAutoSuggestComponent:React.FC<any> = (props: any) => {
-  const [options, setOptions] = React.useState<any>(null);
 
   const onChange = (value:any) => {
 
@@ -29,7 +28,7 @@ const ProductAutoSuggestComponent:React.FC<any> = (props: any) => {
     
     if(product)
       product.selectedVarient = {...product.shop_product_primary_variant, quantity: 1};    
-    props.dispatch({ type: 'CHOOSE_PRODUCT', payload: product });     
+      props.dispatch({ type: 'CHOOSE_PRODUCT', payload: product });     
   }
   
   const onBlur =() => {
@@ -45,7 +44,8 @@ const ProductAutoSuggestComponent:React.FC<any> = (props: any) => {
   }
   
   
-    return (<Form.Item name="product" label="Product" rules={[{ required: true }]} initialValue={props.product.id}>
+    return (<Form.Item name="product" label="Product" rules={[{ required: true }]}
+     initialValue={props.product.id}>
     <Select
       autoFocus
       showSearch      

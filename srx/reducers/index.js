@@ -21,10 +21,16 @@ const initialState = {
         token: action.payload
       });
     }   
-    if (action.type === CHOOSE_PRODUCT) {      
-      return Object.assign({}, state, {
-        product: {...state.product, ...action.payload}
-      });
+    if (action.type === CHOOSE_PRODUCT) { 
+      if(action.payload){
+        return Object.assign({}, state, {
+          product: {...state.product, ...action.payload}
+        });
+      }else{
+        return Object.assign({}, state, {
+          product: {}
+        });
+      }      
     }   
     if (action.type === CART_PRODUCTS) {      
       return Object.assign({}, state, {

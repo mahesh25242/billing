@@ -45,20 +45,28 @@ const BillingComponent:React.FC = (props:any) => {
           render: (text: string, record:any, index:number) => <a>{text}</a>,
         },
         {
-          title: 'Status',
-          dataIndex: 'status_text',
-          key: 'status_text',
-        },
-        {
-          title: 'Created At',
-          dataIndex: 'created_at',
-          key: 'created_at',
-        },
-        {
-          title: 'Varients',
+          title: 'Varient',
           dataIndex: 'shop_product_variant',
           key: 'shop_product_variant',
-          render: (text: string, record:any, index:number) => <a>{ record.shop_product_variant && record.shop_product_variant.length} </a>,
+          render: (text: string, record:any, index:number) => <a>{ record.selectedVarient && record.selectedVarient.name} </a>,
+        },
+        {
+          title: 'Quantity',
+          dataIndex: 'quantity',
+          key: 'quantity',
+          render: (text: string, record:any, index:number) => <a>{ record.selectedVarient && record.selectedVarient.quantity} </a>,
+        },
+        {
+          title: 'Unit Price',
+          dataIndex: 'price',
+          key: 'price',
+          render: (text: string, record:any, index:number) => <a> ₹ { record.selectedVarient && record.selectedVarient.price} </a>,
+        },
+        {
+          title: 'Total',
+          dataIndex: 'total',
+          key: 'total',
+          render: (text: string, record:any, index:number) => <a> ₹ { record.selectedVarient && (record.selectedVarient.quantity * record.selectedVarient.price)} </a>,
         },
         {
           title: 'Options',
@@ -73,8 +81,8 @@ const BillingComponent:React.FC = (props:any) => {
       
       const onFinish = (values: any) => {        
         props.dispatch({ type: 'CART_PRODUCTS', payload: props.product});                
-        console.log('Success:', values);
-        console.log(props)
+        props.dispatch({ type: 'CHOOSE_PRODUCT', payload: null });                        
+        form.resetFields();
       };
     
       const onFinishFailed = (errorInfo: any) => {
@@ -212,7 +220,12 @@ const BillingComponent:React.FC = (props:any) => {
       </Form.Item>
 
       </Form>
-       
+       {
+         props.cart && props.cart.length > 0 &&
+         <Table dataSource={props.cart} 
+          columns={columns}  rowKey="selectedVarient.id" scroll={{ y: 400 }} />
+       }
+      
     </>);
 };
 
