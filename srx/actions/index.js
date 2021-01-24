@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 import { SET_LOGIN, REMOVE_LOGIN,
-    CHOOSE_PRODUCT, CART_PRODUCTS } from "../constants/action-types";
+    CHOOSE_PRODUCT, CART_PRODUCTS,
+    REMOVE_FROM_CART } from "../constants/action-types";
 
 export const  setLogin = (payload) => {
     return { type: SET_LOGIN, payload }
@@ -13,6 +14,9 @@ export const  ChooseProduct = (payload) => {
 }
 export const  CartProducts = (payload) => {
     return { type: CART_PRODUCTS, payload }
+}
+export const  RemoveFromCart = (payload) => {
+    return { type: REMOVE_FROM_CART, payload }
 }
 
 

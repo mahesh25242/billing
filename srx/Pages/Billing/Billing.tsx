@@ -8,6 +8,7 @@ import { Link } from 'react-router-dom';
 import { AutoComplete } from 'antd';
 import { ProductAutoSuggest } from './components';
 import { connect } from 'react-redux';
+import { RemoveProduct } from './components';
 
 const { Option } = AutoComplete;
 
@@ -72,7 +73,7 @@ const BillingComponent:React.FC = (props:any) => {
           title: 'Options',
           dataIndex: 'id',
           key: 'id',
-          render: (text: string, record: any, index: number) => <a>Delete</a>,
+          render: (text: string, record: any, index: number) => <RemoveProduct item={record}>Delete</RemoveProduct>,
         },
       ];
       
@@ -223,7 +224,7 @@ const BillingComponent:React.FC = (props:any) => {
        {
          props.cart && props.cart.length > 0 &&
          <Table dataSource={props.cart} 
-          columns={columns}  rowKey="selectedVarient.id" scroll={{ y: 400 }} />
+          columns={columns}  rowKey={record => `${record.id}-${record.selectedVarient.id}`}  scroll={{ y: 400 }} />
        }
       
     </>);

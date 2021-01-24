@@ -1,7 +1,8 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { SET_LOGIN, REMOVE_LOGIN, 
-CHOOSE_PRODUCT, CART_PRODUCTS } from "../constants/action-types";
+CHOOSE_PRODUCT, CART_PRODUCTS,
+REMOVE_FROM_CART } from "../constants/action-types";
 
 
 const initialState = {
@@ -21,6 +22,7 @@ const initialState = {
         token: action.payload
       });
     }   
+    
     if (action.type === CHOOSE_PRODUCT) { 
       if(action.payload){
         return Object.assign({}, state, {
@@ -49,7 +51,13 @@ const initialState = {
  
       
     }  
-  
+    if (action.type === REMOVE_FROM_CART) { 
+      console.log(state.cart, action.payload)     
+      const cart = state.cart.filter((product) => product.id != action.payload.id || ( product.id == action.payload.id && product.selectedVarient.id != action.payload.selectedVarient.id))        
+      return Object.assign({}, state, {
+        cart: cart
+      });
+    }   
     return state;
   };
   
