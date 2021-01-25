@@ -55,7 +55,10 @@ const BillingComponent:React.FC = (props:any) => {
           title: 'Quantity',
           dataIndex: 'quantity',
           key: 'quantity',
-          render: (text: string, record:any, index:number) => <a>{ record.selectedVarient && record.selectedVarient.quantity} </a>,
+          render: (text: string, record:any, index:number) => <InputNumber value={record.selectedVarient.quantity} size="large" onChange={(evt) => {     
+            record.selectedVarient.quantity = evt;
+            props.dispatch({ type: 'UPDATE_CART', payload: record });                
+          }}/>,
         },
         {
           title: 'Unit Price',
@@ -93,7 +96,7 @@ const BillingComponent:React.FC = (props:any) => {
       
 
       
-     console.log(props)
+     
 
       const chooseVarient = (value: any) => {
         let varient:any;

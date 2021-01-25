@@ -2,7 +2,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { SET_LOGIN, REMOVE_LOGIN, 
 CHOOSE_PRODUCT, CART_PRODUCTS,
-REMOVE_FROM_CART } from "../constants/action-types";
+REMOVE_FROM_CART, UPDATE_CART } from "../constants/action-types";
 
 
 const initialState = {
@@ -51,12 +51,23 @@ const initialState = {
  
       
     }  
-    if (action.type === REMOVE_FROM_CART) { 
-      console.log(state.cart, action.payload)     
+    if (action.type === REMOVE_FROM_CART) {       
       const cart = state.cart.filter((product) => product.id != action.payload.id || ( product.id == action.payload.id && product.selectedVarient.id != action.payload.selectedVarient.id))        
       return Object.assign({}, state, {
         cart: cart
       });
+    }   
+    if (action.type === UPDATE_CART) {       
+      console.log(action.payload.selectedVarient.quantity)
+      const product = state.cart.find(x => x.id === action.payload.id && x.selectedVarient.id == action.payload.selectedVarient.id)    
+      if(product){
+        product.selectedVarient.quantity = action.payload.selectedVarient.quantity ;
+        return Object.assign({}, state, {
+          cart: [...state.cart]
+        });
+      }
+      return state;
+      
     }   
     return state;
   };
