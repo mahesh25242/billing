@@ -49,7 +49,28 @@ const BillingComponent:React.FC = (props:any) => {
           title: 'Varient',
           dataIndex: 'shop_product_variant',
           key: 'shop_product_variant',
-          render: (text: string, record:any, index:number) => <a>{ record.selectedVarient && record.selectedVarient.name} </a>,
+          render: (text: string, record:any, index:number) =>  <Select
+            showSearch
+            style={{ width: 200 }}
+            placeholder="Select a Varient"
+            optionFilterProp="children"
+            value={record.selectedVarient.id}
+            // onChange={(evt) => {              
+            //   const product = record.shop_product_variant.find((spv:any) => spv.id === evt)                  
+            //   product.quantity = 1;
+            //   props.dispatch({ type: 'UPDATE_CART', payload: record });    
+            // }}
+            // onFocus={onFocus}
+            // onBlur={onBlur}
+            // onSearch={onSearch}
+            filterOption={(input, option) =>
+              option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+            }
+          >
+            {
+              record.shop_product_variant.map((vrnt: any, idx:number) => <Option value={vrnt.id} key={idx}>{vrnt.name}</Option>)
+            }            
+          </Select>        
         },
         {
           title: 'Quantity',

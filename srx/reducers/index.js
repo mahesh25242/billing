@@ -57,8 +57,7 @@ const initialState = {
         cart: cart
       });
     }   
-    if (action.type === UPDATE_CART) {       
-      console.log(action.payload.selectedVarient.quantity)
+    if (action.type === UPDATE_CART) {             
       const product = state.cart.find(x => x.id === action.payload.id && x.selectedVarient.id == action.payload.selectedVarient.id)    
       if(product){
         product.selectedVarient.quantity = action.payload.selectedVarient.quantity ;
