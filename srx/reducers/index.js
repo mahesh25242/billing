@@ -2,7 +2,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { SET_LOGIN, REMOVE_LOGIN, 
 CHOOSE_PRODUCT, CART_PRODUCTS,
-REMOVE_FROM_CART, UPDATE_CART } from "../constants/action-types";
+REMOVE_FROM_CART, UPDATE_CART} from "../constants/action-types";
 
 
 const initialState = {
@@ -68,6 +68,7 @@ const initialState = {
       return state;
       
     }   
+      
     return state;
   };
   

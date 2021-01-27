@@ -9,6 +9,8 @@ import { AutoComplete } from 'antd';
 import { ProductAutoSuggest } from './components';
 import { connect } from 'react-redux';
 import { RemoveProduct } from './components';
+import { PrinterOutlined } from '@ant-design/icons';
+
 
 const { Option } = AutoComplete;
 
@@ -55,11 +57,16 @@ const BillingComponent:React.FC = (props:any) => {
             placeholder="Select a Varient"
             optionFilterProp="children"
             value={record.selectedVarient.id}
-            // onChange={(evt) => {              
-            //   const product = record.shop_product_variant.find((spv:any) => spv.id === evt)                  
-            //   product.quantity = 1;
-            //   props.dispatch({ type: 'UPDATE_CART', payload: record });    
-            // }}
+            onChange={(evt) => {              
+              const selectedVarient = record.shop_product_variant.find((spv:any) => spv.id === evt) ;
+              props.dispatch({ type: 'REMOVE_FROM_CART', payload: record});                
+
+              selectedVarient.quantity = record.selectedVarient.quantity;
+              record.selectedVarient = selectedVarient;
+              props.dispatch({ type: 'CART_PRODUCTS', payload: record});                
+
+                
+            }}
             // onFocus={onFocus}
             // onBlur={onBlur}
             // onSearch={onSearch}
@@ -247,8 +254,10 @@ const BillingComponent:React.FC = (props:any) => {
       </Form>
        {
          props.cart && props.cart.length > 0 &&
-         <Table dataSource={props.cart} 
-          columns={columns}  rowKey={record => `${record.id}-${record.selectedVarient.id}`}  scroll={{ y: 400 }} />
+         <><Table dataSource={props.cart} 
+          columns={columns}  rowKey={record => `${record.id}-${record.selectedVarient.id}`}  scroll={{ y: 400 }} />          
+          <Button type="primary" shape="round" icon={<PrinterOutlined />} size="large" >Print</Button>
+          </>
        }
       
     </>);
