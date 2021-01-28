@@ -2,14 +2,12 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 import * as React from 'react';
 import { ProductService } from '../../services';
-import { Button, Form, Input, InputNumber, PageHeader, Select, Table } from 'antd';
-import { Row, Col } from 'antd';
+import { Button, Form, Input, InputNumber, PageHeader, Select,  Row, Col, AutoComplete } from 'antd';
 import { Link } from 'react-router-dom';
-import { AutoComplete } from 'antd';
-import { ProductAutoSuggest } from './components';
+import { ProductAutoSuggest,  ProductCartGrid } from './components';
 import { connect } from 'react-redux';
-import { RemoveProduct } from './components';
-import { PrinterOutlined } from '@ant-design/icons';
+
+
 
 
 const { Option } = AutoComplete;
@@ -39,74 +37,7 @@ const BillingComponent:React.FC = (props:any) => {
    
     
 
-    const columns = [
-        {
-          title: 'Name',
-          dataIndex: 'name',
-          key: 'id',
-          ellipsis: true,
-          render: (text: string, record:any, index:number) => <a>{text}</a>,
-        },
-        {
-          title: 'Varient',
-          dataIndex: 'shop_product_variant',
-          key: 'shop_product_variant',
-          render: (text: string, record:any, index:number) =>  <Select
-            showSearch
-            style={{ width: 200 }}
-            placeholder="Select a Varient"
-            optionFilterProp="children"
-            value={record.selectedVarient.id}
-            onChange={(evt) => {              
-              const selectedVarient = record.shop_product_variant.find((spv:any) => spv.id === evt) ;
-              props.dispatch({ type: 'REMOVE_FROM_CART', payload: record});                
-
-              selectedVarient.quantity = record.selectedVarient.quantity;
-              record.selectedVarient = selectedVarient;
-              props.dispatch({ type: 'CART_PRODUCTS', payload: record});                
-
-                
-            }}
-            // onFocus={onFocus}
-            // onBlur={onBlur}
-            // onSearch={onSearch}
-            filterOption={(input, option) =>
-              option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
-            }
-          >
-            {
-              record.shop_product_variant.map((vrnt: any, idx:number) => <Option value={vrnt.id} key={idx}>{vrnt.name}</Option>)
-            }            
-          </Select>        
-        },
-        {
-          title: 'Quantity',
-          dataIndex: 'quantity',
-          key: 'quantity',
-          render: (text: string, record:any, index:number) => <InputNumber value={record.selectedVarient.quantity} size="large" onChange={(evt) => {     
-            record.selectedVarient.quantity = evt;
-            props.dispatch({ type: 'UPDATE_CART', payload: record });                
-          }}/>,
-        },
-        {
-          title: 'Unit Price',
-          dataIndex: 'price',
-          key: 'price',
-          render: (text: string, record:any, index:number) => <a> ₹ { record.selectedVarient && record.selectedVarient.price} </a>,
-        },
-        {
-          title: 'Total',
-          dataIndex: 'total',
-          key: 'total',
-          render: (text: string, record:any, index:number) => <a> ₹ { record.selectedVarient && (record.selectedVarient.quantity * record.selectedVarient.price)} </a>,
-        },
-        {
-          title: 'Options',
-          dataIndex: 'id',
-          key: 'id',
-          render: (text: string, record: any, index: number) => <RemoveProduct item={record}>Delete</RemoveProduct>,
-        },
-      ];
+    
       
 
 
@@ -254,10 +185,7 @@ const BillingComponent:React.FC = (props:any) => {
       </Form>
        {
          props.cart && props.cart.length > 0 &&
-         <><Table dataSource={props.cart} 
-          columns={columns}  rowKey={record => `${record.id}-${record.selectedVarient.id}`}  scroll={{ y: 400 }} />          
-          <Button type="primary" shape="round" icon={<PrinterOutlined />} size="large" >Print</Button>
-          </>
+         <ProductCartGrid/>
        }
       
     </>);
