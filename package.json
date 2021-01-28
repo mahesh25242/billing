@@ -2,14 +2,14 @@
   "name": "billing",
   "productName": "billing",
   "version": "1.0.0",
-  "description": "My Electron application description",
+  "description": "Desktop Billing Application",
   "main": ".webpack/main",
   "scripts": {
     "start": "electron-forge start",
     "package": "electron-forge package",
     "make": "electron-forge make",
     "publish": "electron-forge publish",
-    "lint": "eslint --ext .ts ."
+    "lint": "eslint --ext .ts ."    
   },
   "keywords": [],
   "author": {
@@ -24,7 +24,7 @@
         {
           "name": "@electron-forge/maker-squirrel",
           "config": {
-            "name": "billing"
+            "name": "billing"          
           }
         },
         {

@@ -27,4 +27,25 @@ export class ProductService {
     })
   );
  } 
+
+
+  createOrder (postData = null) {
+    const tokenStr = localStorage.getItem('token');
+    const token = JSON.parse(tokenStr)
+    return ajax({
+      url: `${config.apiUrl}/shop/createOrder`,
+      method: 'POST',
+      headers: {
+          ...config.ajax.header,
+          ...{
+              'Authorization': `${token.token_type} ${token.access_token}`
+          }
+      },
+      body: postData
+    }).pipe(            
+      catchError(error => {                              
+        return throwError(error);
+      })
+    );
+ } 
 }

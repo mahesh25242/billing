@@ -1,21 +1,52 @@
 import * as React from 'react';
-import { Modal, Button, Form, Row, Col, Input, Descriptions } from 'antd';
+import { Modal, Button, Form, Row, Col, Input, Descriptions, message } from 'antd';
 import { PrinterOutlined } from '@ant-design/icons';
 import { getTimeProps } from 'antd/lib/date-picker/generatePicker';
 import { connect } from 'react-redux';
+import { ProductService } from '../../../services';
 
 const mapStateToProps = (state: { cart: any;  }) => {
   return {  cart: state.cart };
 };
 
 const PrintBillComponent = (props: any) =>{
+
+  const productService = new ProductService();
     const [isModalVisible, setIsModalVisible] = React.useState(false);
-    
+    const [form] = Form.useForm();
+
     const showModal = () => {
         setIsModalVisible(true);
       };
     
       const handleOk = () => {
+        let cart: any[] = [];
+        props.cart.map((pdt:any) => {
+          pdt.shop_product_selected_variant = pdt.selectedVarient;
+          const item = {
+            message: '',
+            price: pdt.selectedVarient.price,
+            product: pdt,
+            qty: pdt.selectedVarient.quantity
+          };
+          cart = [...cart, item]
+        })
+        const postParm = {
+          cart : cart,
+          name: form.getFieldValue("name") ?? 'billing',
+          phone: form.getFieldValue("mobile") ?? '1234567890',
+          selectedLocation:{
+            id: 1,
+            name:'Kakkanad'
+          }
+        }
+        productService.createOrder(postParm).subscribe(res=>{
+          console.log(res?.response);
+          message.success(`successfully created bill ${form.getFieldValue(`name`) ?? ``}`);
+
+        }, error=>{
+          console.log(error)
+        })
         setIsModalVisible(false);
       };
     
@@ -38,6 +69,7 @@ const PrintBillComponent = (props: any) =>{
     <Modal title="Customer Details" visible={isModalVisible} onOk={handleOk} onCancel={handleCancel}>
       <Form             
           name="basic"
+          form={form}  
           initialValues={{  }}
           onFinish={onFinish}
           onFinishFailed={onFinishFailed}

@@ -1,3 +1,4 @@
+/* eslint-disable import/no-unresolved */
 import { AutoComplete, InputNumber, Select, Table } from 'antd';
 import * as React from 'react';
 import { connect } from 'react-redux';
