@@ -39,6 +39,9 @@ const MyHeaderComponent = (props: any) => {
         ipcRenderer.on('sign-out', (event) => {
             localStorage.removeItem('token');
             props.dispatch({ type: 'REMOVE_LOGIN', payload: null });                         
+            const win = remote.getCurrentWindow();
+            win.close();
+            
         });
     
 

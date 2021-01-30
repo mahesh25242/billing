@@ -29,7 +29,10 @@ const createWindow = (): void => {
   mainWindow.webContents.openDevTools();  
   const menu = Menu.buildFromTemplate(windowMenu(mainWindow))
   
+  
   Menu.setApplicationMenu(menu);
+  mainWindow.setMenuBarVisibility(false)
+
 };
 
 // This method will be called when Electron has finished

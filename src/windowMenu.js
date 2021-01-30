@@ -10,7 +10,8 @@ export const windowMenu = (win) =>  [
         submenu: [
            {
             label: 'Quit',
-            accelerator: 'CmdOrCtrl+Q',
+            accelerator: 'CmdOrCtrl+Q',            
+            toolTip: 'toottip',            
             click: () =>{                       
                 win.webContents.send('sign-out');
                 win.close();
@@ -73,10 +74,10 @@ export const windowMenu = (win) =>  [
     },
     
     {
-        label: 'product',
+        label: 'product',        
         submenu: [
           {
-            label: 'List Product',
+            label: 'List Product',            
             accelerator: 'Shift+CmdOrCtrl+P',
             id: 'ListProduct',
             click: () =>{                       
@@ -95,6 +96,7 @@ export const windowMenu = (win) =>  [
     },
     {
         label: 'Billing',
+        visible: false,
         submenu: [
           {
             label: 'New Billing',

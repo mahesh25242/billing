@@ -16,6 +16,7 @@ import Products from '../Pages/Products/Products';
 import Billing from '../Pages/Billing/Billing';
 
 import { connect } from "react-redux";
+import { remote, ipcRenderer } from 'electron';
 
 const mapStateToProps = (state: { token: any;  }) => {
   return { token: state.token };
@@ -43,7 +44,9 @@ const MyRouters = () => {
 }
 
 const PrivateRouteFn:React.FC<any>   = ({ children, ...rest }) => {
-  
+  if(rest.token && rest.token.access_token)  
+    remote.getCurrentWindow().setMenuBarVisibility(true)
+
   return (
     <Route
       {...rest}
