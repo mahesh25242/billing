@@ -9,14 +9,22 @@ export const windowMenu = (win) =>  [
         label: 'File',
         submenu: [
            {
+            label: 'Sign Out',
+            accelerator: 'CmdOrCtrl+E',            
+            toolTip: 'toottip',            
+            click: () =>{                       
+                win.webContents.send('sign-out-only');                
+            }
+           },
+           {
             label: 'Quit',
             accelerator: 'CmdOrCtrl+Q',            
             toolTip: 'toottip',            
             click: () =>{                       
                 win.webContents.send('sign-out');
-                win.close();
+                //win.close();
             }
-           }          
+           }           
         ]
      },
      {

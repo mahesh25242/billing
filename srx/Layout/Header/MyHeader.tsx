@@ -43,6 +43,13 @@ const MyHeaderComponent = (props: any) => {
             win.close();
             
         });
+
+        ipcRenderer.on('sign-out-only', (event) => {
+            localStorage.removeItem('token');
+            props.dispatch({ type: 'REMOVE_LOGIN', payload: null });
+            remote.getCurrentWindow().setMenuBarVisibility(false)                                     
+            
+        });
     
 
         const token = localStorage.getItem('token');        
