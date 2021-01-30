@@ -3,11 +3,12 @@
 import { SET_LOGIN, REMOVE_LOGIN, 
 CHOOSE_PRODUCT, CART_PRODUCTS,
 REMOVE_FROM_CART, UPDATE_CART, 
-EMPTY_CART} from "../constants/action-types";
+EMPTY_CART, SET_SHOP} from "../constants/action-types";
 
 
 const initialState = {
     token: {}, 
+    shop:{},
     product: {},
     cart: []   
   };
@@ -16,6 +17,11 @@ const initialState = {
     if (action.type === SET_LOGIN) {      
         return Object.assign({}, state, {
           token: {...state.token, ...action.payload}
+        });
+    }    
+    if (action.type === SET_SHOP) {      
+        return Object.assign({}, state, {
+          shop: {...state.shop, ...action.payload}
         });
     }    
     if (action.type === REMOVE_LOGIN) {      

@@ -12,8 +12,8 @@ import { connect } from 'react-redux';
 
 const { Option } = AutoComplete;
 
-const mapStateToProps = (state: { product: any, cart: any;  }) => {
-  return { product: state.product, cart: state.cart };
+const mapStateToProps = (state: { product: any, cart: any; shop: any }) => {
+  return { product: state.product, cart: state.cart, shop: state.shop };
 };
 
 const BillingComponent:React.FC = (props:any) => {
@@ -93,8 +93,8 @@ const BillingComponent:React.FC = (props:any) => {
     return (<>
       <PageHeader
         className="site-page-header"        
-        title="Billing"
-        subTitle="Product Billing"
+        title={`Billing`}
+        subTitle={props.shop.name}
         extra={[
           <Button key="1"><Link to="/products">List Product</Link></Button>,          
         ]}

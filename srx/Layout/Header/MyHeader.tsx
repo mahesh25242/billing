@@ -5,7 +5,8 @@ import { connect } from "react-redux";
 
 import { remote, ipcRenderer } from 'electron';
 import { useHistory } from 'react-router';
-
+import { ShopService } from '../../services';
+import { Subscription } from 'rxjs';
          
 
 
@@ -18,7 +19,7 @@ const mapStateToProps = (state: { token: any;  }) => {
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 const MyHeaderComponent = (props: any) => {
     
-    
+    const shopService = new ShopService();
     const history = useHistory();
     
     
@@ -50,13 +51,28 @@ const MyHeaderComponent = (props: any) => {
             remote.getCurrentWindow().setMenuBarVisibility(false)                                     
             
         });
-    
+        
 
         const token = localStorage.getItem('token');        
         props.dispatch({ type: 'SET_LOGIN', payload: JSON.parse(token) });   
 
+       
     }, []);
 
+    
+    useEffect(() => {
+        let shopSubscr:Subscription;
+        if(props.token){
+            shopSubscr = shopService.shop().subscribe((shop: any)=>{                
+                props.dispatch({ type: 'SET_SHOP', payload: shop.response });   
+            });
+        }
+        
+        return () => {
+            shopSubscr && shopSubscr.unsubscribe();
+          };
+
+    }, [props.token]);
         
     return (<>
     {/* <div className="logo" />

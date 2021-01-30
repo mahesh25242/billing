@@ -3,7 +3,7 @@ const config = {
     ajax:{
         header:{
             'Content-Type': 'application/json',              
-            'shopKey': '3d9f5a8eec71764c7c2df5a56496c8a1320dd921',            
+            'IsApps': 1            
         },
         signBody:{
             "grant_type": "password",
