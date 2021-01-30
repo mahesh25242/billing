@@ -14,8 +14,8 @@ const {PosPrinter} = remote.require("electron-pos-printer");
 
 
 
-const mapStateToProps = (state: { cart: any;  }) => {
-  return {  cart: state.cart };
+const mapStateToProps = (state: { cart: any; shop: any }) => {
+  return {  cart: state.cart, shop: state.shop };
 };
 
 const PrintBillComponent = (props: any) =>{
@@ -29,6 +29,7 @@ const PrintBillComponent = (props: any) =>{
       };
     
       const handleOk = () => {
+        
         let cart: any[] = [];
         props.cart.map((pdt:any) => {
           pdt.shop_product_selected_variant = pdt.selectedVarient;
@@ -40,14 +41,14 @@ const PrintBillComponent = (props: any) =>{
           };
           cart = [...cart, item]
         })
+        if(!props.shop.shop_delivery){
+          message.error(`No shop delivery found`);
+        }
         const postParm = {
           cart : cart,
           name: form.getFieldValue("name") ?? 'billing',
           phone: form.getFieldValue("mobile") ?? '1234567890',
-          selectedLocation:{
-            id: 1,
-            name:'Kakkanad'
-          }
+          selectedLocation:props.shop.shop_delivery[0]
         }
         productService.createOrder(postParm).subscribe(res=>{
           console.log(res?.response);
@@ -55,7 +56,7 @@ const PrintBillComponent = (props: any) =>{
 
 
           const options: PosPrintOptions = {
-            preview: false,
+            preview: true,
             width: '170px',       
             margin: '0 0 0 0',    
             copies: 1,
@@ -74,7 +75,7 @@ const PrintBillComponent = (props: any) =>{
               height: '60px',                                          // width of image in px; default: 50 or '50px'
             },{
                type: 'text',                                       // 'text' | 'barCode' | 'qrCode' | 'image' | 'table
-               value: 'SAMPLE HEADING',
+               value: props.shop.name,
                style: `text-align:center;`,
                css: {"font-weight": "700", "font-size": "14px"}
             },{
@@ -91,7 +92,7 @@ const PrintBillComponent = (props: any) =>{
                fontsize: 8,
             },{
               type: 'qrCode',
-               value: 'https://github.com/Hubertformin/electron-pos-printer',
+               value: props.shop.shop_url,
                height: '55',
                width: '55',
                style: 'margin: 10 20px 20 20px'
@@ -100,7 +101,7 @@ const PrintBillComponent = (props: any) =>{
                 // style the table
                 style: 'border: 1px solid #ddd',
                 // list of the columns to be rendered in the table header
-                tableHeader: ['Animal', 'Age'],
+                tableHeader: ['Item', 'Price'],
                 // multi dimensional array depicting the rows and columns of the table body
                 tableBody: [
                     ['Cat', '2'],
@@ -109,45 +110,26 @@ const PrintBillComponent = (props: any) =>{
                     ['Pig', '4'],
                 ],
                 // list of columns to be rendered in the table footer
-                tableFooter: ['Animal', 'Age'],
+               // tableFooter: ['Animal', 'Age'],
                 // custom style for the table header
                 tableHeaderStyle: 'background-color: #000; color: white;',
                 // custom style for the table body
                 tableBodyStyle: 'border: 0.5px solid #ddd',
                 // custom style for the table footer
                 tableFooterStyle: 'background-color: #000; color: white;',
-             },{
-                type: 'table',
-                style: 'border: 1px solid #ddd',             // style the table
-                // list of the columns to be rendered in the table header
-                tableHeader: [{type: 'text', value: 'Animal'}, {type: 'image', path: path.join(__dirname, 'icons/animal.png')}],
-                // multi dimensional array depicting the rows and columns of the table body
-                tableBody: [
-                    [{type: 'text', value: 'Cat'}, {type: 'image', path: './animals/cat.jpg'}],
-                    [{type: 'text', value: 'Dog'}, {type: 'image', path: './animals/dog.jpg'}],
-                    [{type: 'text', value: 'Horse'}, {type: 'image', path: './animals/horse.jpg'}],
-                    [{type: 'text', value: 'Pig'}, {type: 'image', path: './animals/pig.jpg'}],
-                ],
-                // list of columns to be rendered in the table footer
-                tableFooter: ['test footer'], //[{type: 'text', value: 'Animal'}, 'Image'],
-                // custom style for the table header
-                tableHeaderStyle: 'background-color: #000; color: white;',
-                // custom style for the table body
-                tableBodyStyle: 'border: 0.5px solid #ddd',
-                // custom style for the table footer
-                tableFooterStyle: 'background-color: #000; color: white;',
-             },
+             }
          ]
          PosPrinter.print(data, options)
           .then((suc:any) => {
+            
             console.log(suc)
           })
           .catch((error:any) => {
              console.error(error);
            });
 
+           props.dispatch({ type: 'EMPTY_CART', payload: null}); 
            
-          props.dispatch({ type: 'EMPTY_CART', payload: null});  
 
         }, error=>{
           let msg:string = '';
@@ -186,7 +168,7 @@ const PrintBillComponent = (props: any) =>{
       const sum:number =  props.cart.reduce((total:number,product:any)=>  total + ( product.selectedVarient.quantity * product.selectedVarient.price ) ,0 );
 
     return <>
-    <Button type="primary" shape="round" icon={<PrinterOutlined />} size="large" onClick={(evt) => showModal()}>Print</Button>
+    <Button type="primary" shape="round" icon={<PrinterOutlined />} size="large" onClick={(evt) => showModal()}>Save & Print</Button>
     <Modal title="Customer Details" visible={isModalVisible} onOk={handleOk} onCancel={handleCancel}>
       <Form             
           name="basic"
