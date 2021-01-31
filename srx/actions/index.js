@@ -3,11 +3,19 @@ import { SET_LOGIN, SET_SHOP,
     REMOVE_LOGIN,
     CHOOSE_PRODUCT, CART_PRODUCTS,
     REMOVE_FROM_CART, UPDATE_CART, 
-    EMPTY_CART} from "../constants/action-types";
+    EMPTY_CART, BILLING_TABS, 
+    SELECTED_BILLING_TAB} from "../constants/action-types";
 
 export const  setLogin = (payload) => {
     return { type: SET_LOGIN, payload }
 }
+export const  billingTabs = (payload) => {
+    return { type: BILLING_TABS, payload }
+}
+export const  selectedBillingTab = (payload) => {
+    return { type: SELECTED_BILLING_TAB, payload }
+}
+
 export const  setShop = (payload) => {
     return { type: SET_SHOP, payload }
 }

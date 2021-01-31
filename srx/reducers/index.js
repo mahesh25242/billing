@@ -3,14 +3,17 @@
 import { SET_LOGIN, REMOVE_LOGIN, 
 CHOOSE_PRODUCT, CART_PRODUCTS,
 REMOVE_FROM_CART, UPDATE_CART, 
-EMPTY_CART, SET_SHOP} from "../constants/action-types";
+EMPTY_CART, SET_SHOP, BILLING_TABS, 
+SELECTED_BILLING_TAB} from "../constants/action-types";
 
 
 const initialState = {
     token: {}, 
     shop:{},
+    billingTab:0,
+    billingTabs:["Tab 1"],
     product: {},
-    cart: []   
+    cart: {}   
   };
   
   const  rootReducer = (state = initialState, action) => {
@@ -29,11 +32,22 @@ const initialState = {
         token: action.payload
       });
     }   
+    if (action.type === BILLING_TABS) {      
+        return Object.assign({}, state, {
+          billingTabs:  action.payload
+        });
+    }
+    if (action.type === SELECTED_BILLING_TAB) {      
+        return Object.assign({}, state, {
+          billingTab: action.payload
+        });
+    }
     
     if (action.type === CHOOSE_PRODUCT) { 
+      
       if(action.payload){
         return Object.assign({}, state, {
-          product: {...state.product, ...action.payload}
+          product: {...state.product, ...{ [state.billingTab]: action.payload}}
         });
       }else{
         return Object.assign({}, state, {
@@ -41,17 +55,18 @@ const initialState = {
         });
       }      
     }   
-    if (action.type === CART_PRODUCTS) {     
-        const product = state.cart.find(x => x.id === action.payload.id && x.selectedVarient.id == action.payload.selectedVarient.id)
+    if (action.type === CART_PRODUCTS) {   
+      
+        const product = (state.cart[state.billingTab]) ? state.cart[state.billingTab].find(x => x.id === action.payload.id && x.selectedVarient.id == action.payload.selectedVarient.id) : null
 
         if(product){
           product.selectedVarient.quantity = product.selectedVarient.quantity + action.payload.selectedVarient.quantity;
           return Object.assign({}, state, {
-            cart: [...state.cart]
+            cart: state.cart
           });
         }else{
           return Object.assign({}, state, {
-            cart: [...state.cart, action.payload]
+            cart: {...state.cart, ...{ [state.billingTab]: action.payload}}
           });
         }
           

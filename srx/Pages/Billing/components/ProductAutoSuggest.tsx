@@ -13,11 +13,22 @@ const { Option } = AutoComplete;
 //   product: any
 // }
 
-const mapStateToProps = (state: { product: any;  }) => {
-  return { product: state.product };
+const mapStateToProps = (state: { product: any;billingTab: any  }) => {
+  return { product: state.product[state.billingTab] };
 };
 
 const ProductAutoSuggestComponent:React.FC<any> = (props: any) => {
+  
+    
+
+  React.useEffect(() => {
+    
+    props.form.setFieldsValue({
+      product: props.product?.id
+    })
+
+  }, [props.product]);
+
 
   const onChange = (value:any) => {
 
@@ -44,8 +55,7 @@ const ProductAutoSuggestComponent:React.FC<any> = (props: any) => {
   }
   
   
-    return (<Form.Item name="product" label="Product" rules={[{ required: true }]}
-     initialValue={props.product.id}>
+    return (<Form.Item name="product" label="Product" rules={[{ required: true }]}>
     <Select
       autoFocus
       showSearch      

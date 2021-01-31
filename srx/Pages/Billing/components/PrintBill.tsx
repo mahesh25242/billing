@@ -31,6 +31,8 @@ const PrintBillComponent = (props: any) =>{
       const handleOk = () => {
         
         let cart: any[] = [];
+        let billProductArr:any[] = [];
+        let grandTotal: number = 0;
         props.cart.map((pdt:any) => {
           pdt.shop_product_selected_variant = pdt.selectedVarient;
           const item = {
@@ -40,7 +42,10 @@ const PrintBillComponent = (props: any) =>{
             qty: pdt.selectedVarient.quantity
           };
           cart = [...cart, item]
+          billProductArr = [...billProductArr, [`${pdt.name} - ${pdt.selectedVarient.name}`, item.qty, item.price ]];
+          grandTotal +=item.price;
         })
+        
         if(!props.shop.shop_delivery){
           message.error(`No shop delivery found`);
         }
@@ -67,57 +72,79 @@ const PrintBillComponent = (props: any) =>{
          }
           
          const data: PosPrintData[] = [
+            // {
+            //   type: 'image',                                       
+            //   path: path.join(__dirname, 'assets/banner.png'),     // file path
+            //   position: 'center',                                  // position of image: 'left' | 'center' | 'right'
+            //   width: '60px',                                           // width of image in px; default: auto
+            //   height: '60px',                                          // width of image in px; default: 50 or '50px'
+            // },
             {
-              type: 'image',                                       
-              path: path.join(__dirname, 'assets/banner.png'),     // file path
-              position: 'center',                                  // position of image: 'left' | 'center' | 'right'
-              width: '60px',                                           // width of image in px; default: auto
-              height: '60px',                                          // width of image in px; default: 50 or '50px'
-            },{
                type: 'text',                                       // 'text' | 'barCode' | 'qrCode' | 'image' | 'table
-               value: props.shop.name,
+               value: `${props.shop.name}`,
                style: `text-align:center;`,
                css: {"font-weight": "700", "font-size": "14px"}
-            },{
-               type: 'text',                       // 'text' | 'barCode' | 'qrCode' | 'image' | 'table'
-               value: 'Secondary text',
-               style: `text-align:left;color: red;`,
-               css: {"text-decoration": "underline", "font-size": "10px"}
-            },{
-               type: 'barCode',
-               value: 'HB4587896',
-               height: '12',                     // height of barcode, applicable only to bar and QR codes
-               width: '1',                       // width of barcode, applicable only to bar and QR codes
-               displayValue: true,             // Display value below barcode
-               fontsize: 8,
-            },{
-              type: 'qrCode',
-               value: props.shop.shop_url,
-               height: '55',
-               width: '55',
-               style: 'margin: 10 20px 20 20px'
-             },{
+            },
+            {
+              type: 'text',                                       // 'text' | 'barCode' | 'qrCode' | 'image' | 'table
+              value: `${props.shop.address}`,
+              style: `text-align:center;`,
+              css: {"font-weight": "700", "font-size": "14px"}
+           },
+           
+          {
+            type: 'text',                                       // 'text' | 'barCode' | 'qrCode' | 'image' | 'table
+            value: `${props.shop.city.name}-${props.shop.pin}`,
+            style: `text-align:center;`,
+            css: {"font-weight": "700", "font-size": "14px"}
+          },
+          {
+            type: 'text',                                       // 'text' | 'barCode' | 'qrCode' | 'image' | 'table
+            value: `Phone: ${props.shop.phone}`,
+            style: `text-align:center;`,
+            css: {"font-weight": "700", "font-size": "14px"}
+          },
+          {
+            type: 'text',                       // 'text' | 'barCode' | 'qrCode' | 'image' | 'table'
+            value: `<hr/>`,                        
+          },
+          {
+            type: 'text',                       // 'text' | 'barCode' | 'qrCode' | 'image' | 'table'
+            value: `To: ${postParm.name ?? '-'}${ (postParm.phone) ? `-${postParm.phone}` :''}`,
+            style: `text-align:left;color: red;`,
+            css: {"text-decoration": "underline", "font-size": "10px"}
+          },
+            // {
+            //    type: 'barCode',
+            //    value: 'HB4587896',
+            //    height: '12',                     // height of barcode, applicable only to bar and QR codes
+            //    width: '1',                       // width of barcode, applicable only to bar and QR codes
+            //    displayValue: true,             // Display value below barcode
+            //    fontsize: 8,
+            // },{
+            //   type: 'qrCode',
+            //    value: props.shop.shop_url,
+            //    height: '55',
+            //    width: '55',
+            //    style: 'margin: 10 20px 20 20px'
+            //  },
+             {
                 type: 'table',
                 // style the table
                 style: 'border: 1px solid #ddd',
                 // list of the columns to be rendered in the table header
-                tableHeader: ['Item', 'Price'],
+                tableHeader: ['Item', 'Qty', 'Amount'],
                 // multi dimensional array depicting the rows and columns of the table body
-                tableBody: [
-                    ['Cat', '2'],
-                    ['Dog', '4'],
-                    ['Horse', '12'],
-                    ['Pig', '4'],
-                ],
+                tableBody: billProductArr,
                 // list of columns to be rendered in the table footer
-               // tableFooter: ['Animal', 'Age'],
+                tableFooter: ['', 'Grand Total', `${grandTotal}`],
                 // custom style for the table header
-                tableHeaderStyle: 'background-color: #000; color: white;',
+                tableHeaderStyle: ' color: black;',
                 // custom style for the table body
                 tableBodyStyle: 'border: 0.5px solid #ddd',
                 // custom style for the table footer
-                tableFooterStyle: 'background-color: #000; color: white;',
-             }
+                tableFooterStyle: '  font-weight: bold',
+             }             
          ]
          PosPrinter.print(data, options)
           .then((suc:any) => {

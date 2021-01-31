@@ -6,15 +6,25 @@ import { ExclamationCircleOutlined } from '@ant-design/icons';
 import { useParams } from 'react-router';
 import { Link } from 'react-router-dom';
 import { MyBreadcrumb } from '../../SharedComponents';
+import { connect } from 'react-redux';
 
 
 interface ProductRouteParm {
     id?: any;    
 }
 
+const mapStateToProps = (state: {  cart: any; shop: any }) => {
+  return {  cart: state.cart, shop: state.shop };
+};
 
-export const EditProduct = (props: any) =>{   
+
+export const EditProductComponent = (props: any) =>{   
     const { id } = useParams<ProductRouteParm>();
+
+  //   React.useEffect(() => {
+        
+      
+  // }, [id]);
 
     return <>  
     <PageHeader
@@ -42,3 +52,5 @@ export const EditProduct = (props: any) =>{
          <a>asassas</a>
     </>;
 }
+
+export const EditProduct = connect(mapStateToProps)(EditProductComponent);
