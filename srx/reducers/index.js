@@ -106,7 +106,7 @@ const initialState = {
     }   
     if (action.type === EMPTY_CART) {             
       return Object.assign({}, state, {
-        cart: []
+        cart: {...state.cart,  ...{ [state.billingTab]: []  }   }
       });            
     }   
       
