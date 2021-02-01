@@ -94,7 +94,8 @@ const BillingContentComponent = (props:any) => {
                     
                     <ProductAutoSuggest products={props.products} 
                     form={form}
-                    ></ProductAutoSuggest>          
+                    ></ProductAutoSuggest>    
+                          
                 </Col>
                 {
                   props.product && props.product.shop_product_variant && props.product.shop_product_variant.length > 1 && 
@@ -163,6 +164,14 @@ const BillingContentComponent = (props:any) => {
                   <Button type="primary" htmlType="submit" loading={false} disabled={!props.product || !props.product.selectedVarient || props.product.selectedVarient.quantity <=0 }>
                     Add             
                   </Button>
+                  {
+                    props.product?.id && 
+                    <Button type="primary" htmlType="submit" onClick={()=>{
+                      props.dispatch({ type: 'CHOOSE_PRODUCT', payload: null });     
+                    }}>
+                    Remove             
+                  </Button>
+                  }
               </Form.Item>
         
               </Form>

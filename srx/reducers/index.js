@@ -104,10 +104,17 @@ const initialState = {
       });      
       
     }   
-    if (action.type === EMPTY_CART) {             
-      return Object.assign({}, state, {
-        cart: {...state.cart,  ...{ [state.billingTab]: []  }   }
-      });            
+    if (action.type === EMPTY_CART) { 
+      if(action.payload)            {
+        return Object.assign({}, state, {
+          cart: {...state.cart,  ...{ [action.payload]: []  }   }
+        });            
+      }else{
+        return Object.assign({}, state, {
+          cart: {...state.cart,  ...{ [state.billingTab]: []  }   }
+        });            
+      }
+      
     }   
       
     return state;
