@@ -31,7 +31,7 @@ const BillingContentComponent = (props:any) => {
     
 
         
-        //console.log(props)
+        console.log(props.cart)
 
       
       const onFinish = (values: any) => {        

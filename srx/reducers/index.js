@@ -58,44 +58,50 @@ const initialState = {
     if (action.type === CART_PRODUCTS) {   
         
       
-        const product = (state.cart[state.billingTab]) ? state.cart[state.billingTab].find(x => x.id === action.payload.id && x.selectedVarient.id == action.payload.selectedVarient.id) : null
 
-        if(product){
-          product.selectedVarient.quantity = product.selectedVarient.quantity + action.payload.selectedVarient.quantity;
-          return Object.assign({}, state, {
-            cart: state.cart
-          });
-        }else{
-          if(state.cart[state.billingTab]){
-            return Object.assign({}, state, {
-              cart: {...state.cart,  ...{ [state.billingTab]: [...state.cart[state.billingTab],...[action.payload]]  }   }
-            });
+
+        if(state.cart[state.billingTab]){
+
+          const exists = state.cart[state.billingTab].findIndex(x => x.id === action.payload.id && x.selectedVarient.id == action.payload.selectedVarient.id);
+          if(exists >= 0){
+            state.cart[state.billingTab].map(x=>{
+              if(x.id === action.payload.id && x.selectedVarient.id == action.payload.selectedVarient.id){
+                x.selectedVarient.quantity = x.selectedVarient.quantity+action.payload.selectedVarient.quantity ;                
+              }
+            })
           }else{
-            return Object.assign({}, state, {
-              cart: {...state.cart,  ...{ [state.billingTab]: [...[action.payload]]  }   }
-            });
+            state.cart[state.billingTab] = [...state.cart[state.billingTab], ...[action.payload]]
           }
           
+
+          return Object.assign({}, state, {
+            cart: {...state.cart,  ...{ [state.billingTab]: [...state.cart[state.billingTab]]  }   }
+          });
+        }else{
+          return Object.assign({}, state, {
+            cart: {...state.cart,  ...{ [state.billingTab]: [...[action.payload]]  }   }
+          });
         }
+
           
  
       
     }  
     if (action.type === REMOVE_FROM_CART) {       
-      const cart = state.cart.filter((product) => product.id != action.payload.id || ( product.id == action.payload.id && product.selectedVarient.id != action.payload.selectedVarient.id))        
+      const cart = state.cart[state.billingTab].filter((product) => product.id != action.payload.id || ( product.id == action.payload.id && product.selectedVarient.id != action.payload.selectedVarient.id))        
       return Object.assign({}, state, {
-        cart: cart
+        cart: {...state.cart,  ...{ [state.billingTab]: cart  }   }
       });
     }   
     if (action.type === UPDATE_CART) {             
-      const product = state.cart.find(x => x.id === action.payload.id && x.selectedVarient.id == action.payload.selectedVarient.id)    
-      if(product){
-        product.selectedVarient.quantity = action.payload.selectedVarient.quantity ;
-        return Object.assign({}, state, {
-          cart: [...state.cart]
-        });
-      }
-      return state;
+      state.cart[state.billingTab].map(x=>{
+        if(x.id === action.payload.id && x.selectedVarient.id == action.payload.selectedVarient.id){
+          x.selectedVarient.quantity = action.payload.selectedVarient.quantity ;
+        }
+      })
+      return Object.assign({}, state, {
+        cart: {...state.cart,  ...{ [state.billingTab]: [...state.cart[state.billingTab]]  }   }
+      });      
       
     }   
     if (action.type === EMPTY_CART) {             
