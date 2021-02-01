@@ -169,7 +169,7 @@ const BillingContentComponent = (props:any) => {
                     <Button type="primary" htmlType="submit" onClick={()=>{
                       props.dispatch({ type: 'CHOOSE_PRODUCT', payload: null });     
                     }}>
-                    Remove             
+                    Clear             
                   </Button>
                   }
               </Form.Item>

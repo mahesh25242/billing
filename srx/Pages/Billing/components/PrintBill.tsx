@@ -229,7 +229,7 @@ const PrintBillComponent = (props: any) =>{
         </Form>
         <Descriptions
           bordered
-          title="Custom Size"
+          title="Bag Info"
           size="default"          
         >
           <Descriptions.Item label="Number Of Items">{ props.cart.length }</Descriptions.Item>
