@@ -3,15 +3,15 @@ import React, { useEffect } from 'react';
 import { MainMenu } from '../../SharedComponents';
 import { connect } from "react-redux";
 
-import { remote, ipcRenderer } from 'electron';
+import { remote, ipcRenderer, shell } from 'electron';
 import { useHistory } from 'react-router';
 import { ShopService } from '../../services';
 import { Subscription } from 'rxjs';
          
 
 
-const mapStateToProps = (state: { token: any;  }) => {
-    return { token: state.token };
+const mapStateToProps = (state: { token: any; shop: any  }) => {
+    return { token: state.token, shop: state.shop };
 };
 
 
@@ -50,6 +50,10 @@ const MyHeaderComponent = (props: any) => {
             props.dispatch({ type: 'REMOVE_LOGIN', payload: null });
             remote.getCurrentWindow().setMenuBarVisibility(false)                                     
             
+        });
+        
+        ipcRenderer.on('open-shop-site', async (event) => {
+            await shell.openExternal(props.shop.shop_url)                                              
         });
         
 

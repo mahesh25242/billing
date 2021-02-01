@@ -125,8 +125,8 @@ export const windowMenu = (win) =>  [
           },
           {
               label: 'Shop',
-              click: async () => {                
-                await shell.openExternal('https://agoranature.com/shop/')
+              click:  () => {  
+                  win.webContents.send('open-shop-site');                              
               }
       
           }
