@@ -4,8 +4,8 @@ import * as React from 'react';
 import { connect } from 'react-redux';
 import { RemoveProduct, PrintBill } from './index';
 
-const mapStateToProps = (state: { cart: any;  }) => {
-    return {  cart: state.cart };
+const mapStateToProps = (state: { cart: any; billingTab: any  }) => {
+    return {  cart: state.cart[state.billingTab] };
 };
   
 

@@ -31,7 +31,7 @@ const BillingContentComponent = (props:any) => {
     
 
         
-        console.log(props)
+        //console.log(props)
 
       
       const onFinish = (values: any) => {        
@@ -47,7 +47,7 @@ const BillingContentComponent = (props:any) => {
       
 
       
-     
+     console.log(props.cart)
 
       const chooseVarient = (value: any) => {
         let varient:any;

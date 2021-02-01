@@ -14,8 +14,8 @@ const {PosPrinter} = remote.require("electron-pos-printer");
 
 
 
-const mapStateToProps = (state: { cart: any; shop: any }) => {
-  return {  cart: state.cart, shop: state.shop };
+const mapStateToProps = (state: { cart: any; shop: any, billingTab: any }) => {
+  return {  cart: state.cart[state.billingTab], shop: state.shop };
 };
 
 const PrintBillComponent = (props: any) =>{

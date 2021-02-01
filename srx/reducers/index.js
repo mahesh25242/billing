@@ -56,6 +56,7 @@ const initialState = {
       }      
     }   
     if (action.type === CART_PRODUCTS) {   
+        
       
         const product = (state.cart[state.billingTab]) ? state.cart[state.billingTab].find(x => x.id === action.payload.id && x.selectedVarient.id == action.payload.selectedVarient.id) : null
 
@@ -65,9 +66,16 @@ const initialState = {
             cart: state.cart
           });
         }else{
-          return Object.assign({}, state, {
-            cart: {...state.cart, ...{ [state.billingTab]: action.payload}}
-          });
+          if(state.cart[state.billingTab]){
+            return Object.assign({}, state, {
+              cart: {...state.cart,  ...{ [state.billingTab]: [...state.cart[state.billingTab],...[action.payload]]  }   }
+            });
+          }else{
+            return Object.assign({}, state, {
+              cart: {...state.cart,  ...{ [state.billingTab]: [...[action.payload]]  }   }
+            });
+          }
+          
         }
           
  
