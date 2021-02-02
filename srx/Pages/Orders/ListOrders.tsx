@@ -2,13 +2,12 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 import * as React from 'react';
 import { OrderService } from '../../services';
-import { Button, PageHeader, Table } from 'antd';
+import { Button, Modal, PageHeader, Table } from 'antd';
 
 
-
+import { ViewOrder } from './ViewOrder';
 import { Link, useRouteMatch } from 'react-router-dom';
 
-import { EditProduct } from './EditProduct';
 import { MyBreadcrumb } from '../../SharedComponents';
 import { Subscription } from 'rxjs';
 
@@ -16,7 +15,10 @@ const ListOrders = () => {
     const orderService = new OrderService();
     const [orders, SetOrders] = React.useState(null);
     const [totalPage, SetTotalPage] = React.useState(0);
+    const [order, SetOrder] = React.useState(null);
 
+
+    
     const { path, url } = useRouteMatch();    
     let  prodSubscr:Subscription;
     React.useEffect(() => {
@@ -31,14 +33,14 @@ const ListOrders = () => {
     }, []);
 
    
-
+    
     const columns = [
         {
           title: 'Customer',
           dataIndex: 'customer_name',
           key: 'id',
           ellipsis: true,
-          render: (text: string, record:any, index:number) => <Link to={`/products/create/${record.id}`}>{record.shop_customer.name}</Link>,
+          render: (text: string, record:any, index:number) => <a onClick={() => SetOrder(record)}>{record.shop_customer.name}</a>,
         },
         {
           title: 'Status',
@@ -94,6 +96,19 @@ const ListOrders = () => {
         }
       }} />
       }
+       <Modal
+          visible={order}
+          title={order?.shop_customer?.name}
+          //onOk={}
+          onCancel={()=>SetOrder(null)}
+          footer={[
+            <Button key="back" onClick={()=>SetOrder(null)}>
+              Cancel
+            </Button>,            
+          ]}
+        >
+         <ViewOrder order={order}/>
+        </Modal>
     </>);
 };
 

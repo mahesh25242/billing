@@ -2,24 +2,24 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 import * as React from 'react';
 import {  Route, Switch, useRouteMatch } from 'react-router-dom';
-import { EditProduct } from './EditProduct';
+
 import ListProducts from './ListOrders';
 
 const Orders = () => {
     const { path, url } = useRouteMatch();    
       
-      
+    return (<ListProducts />);
     
-    return (<>
-      <Switch>
-      <Route path={`${path}`} exact>
-          <ListProducts />
-        </Route>
-        <Route path={`${path}/create/:id?`}>
-          <EditProduct />
-        </Route>
-      </Switch>  
-    </>);
+    // return (<>
+    //   <Switch>
+    //   <Route path={`${path}`} exact>
+    //       <ListProducts />
+    //     </Route>
+    //     <Route path={`${path}/view/:id?`}>
+    //       <ViewOrder />
+    //     </Route>
+    //   </Switch>  
+    // </>);
 };
 
 export default Orders;
