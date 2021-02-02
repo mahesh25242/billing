@@ -2,7 +2,7 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 import * as React from 'react';
 import { ProductService } from '../../../services';
-import { Button, Form, Input, InputNumber, PageHeader, Select,  Row, Col, AutoComplete } from 'antd';
+import { Button, Form, Input, InputNumber, PageHeader, Select,  Row, Col, AutoComplete, Space } from 'antd';
 import { Link } from 'react-router-dom';
 import { ProductAutoSuggest,  ProductCartGrid } from '../components';
 import { connect } from 'react-redux';
@@ -31,7 +31,6 @@ const BillingContentComponent = (props:any) => {
     
 
         
-        console.log(props.cart)
 
       
       const onFinish = (values: any) => {        
@@ -47,7 +46,7 @@ const BillingContentComponent = (props:any) => {
       
 
       
-     console.log(props.cart)
+     
 
       const chooseVarient = (value: any) => {
         let varient:any;
@@ -161,17 +160,19 @@ const BillingContentComponent = (props:any) => {
               </Row>
               }
               <Form.Item>
+                <Space>
                   <Button type="primary" htmlType="submit" loading={false} disabled={!props.product || !props.product.selectedVarient || props.product.selectedVarient.quantity <=0 }>
                     Add             
                   </Button>
                   {
                     props.product?.id && 
-                    <Button type="primary" htmlType="submit" onClick={()=>{
+                    <Button  htmlType="submit" onClick={()=>{
                       props.dispatch({ type: 'CHOOSE_PRODUCT', payload: null });     
                     }}>
                     Clear             
                   </Button>
                   }
+                  </Space>
               </Form.Item>
         
               </Form>

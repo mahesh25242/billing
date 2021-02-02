@@ -106,7 +106,7 @@ const BillingComponent:React.FC = (props:any) => {
         title={`Billing [ Tab ${parseInt(props.billingTab)+1} ]`}
         subTitle={props.shop.name}
         extra={[
-          <Button key="1"><Link to="/products">List Product</Link></Button>,          
+          <Button key="1"><Link to="/orders">List Orders</Link></Button>,          
         ]}
       />
 {
@@ -114,7 +114,7 @@ const BillingComponent:React.FC = (props:any) => {
   <Tabs activeKey={`${props.billingTab}`} type="editable-card" 
 onEdit={onEdit} onChange={onTabChange} >
         {
-          props.billingTabs.map((tab: string, idx: number) => <TabPane tab={`Tab ${idx+1}  ${ (props.fullCart[idx].length) ? `( ${props.fullCart[idx].length} )`:`` } `} key={idx} closable={idx > 0}>
+          props.billingTabs.map((tab: string, idx: number) => <TabPane tab={`Tab ${idx+1}  ${ (props.fullCart[idx] && props.fullCart[idx].length) ? `( ${props.fullCart[idx].length} )`:`` } `} key={idx} closable={idx > 0}>
             <BillingContent products={products} tabKey={idx}/>
             </TabPane>
           )

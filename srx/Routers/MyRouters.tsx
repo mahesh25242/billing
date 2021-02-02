@@ -12,7 +12,7 @@ import {
 import Home from '../Pages/Home/Home';
 import Login from '../Pages/Login/Login';
 import ForgotPassword from '../Pages/ForgotPassword/ForgotPassword';
-import Products from '../Pages/Products/Products';
+import Orders from '../Pages/Orders/Orders';
 import Billing from '../Pages/Billing/Billing';
 
 import { connect } from "react-redux";
@@ -34,8 +34,8 @@ const MyRouters = () => {
         <PrivateRoute path="/home">
           <Home />
         </PrivateRoute>        
-        <PrivateRoute path="/products">
-          <Products />
+        <PrivateRoute path="/orders">
+          <Orders />
         </PrivateRoute>        
         <PrivateRoute path="/billing">
           <Billing />

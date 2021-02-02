@@ -25,8 +25,8 @@ const MyHeaderComponent = (props: any) => {
     
     useEffect(() => {
 
-        ipcRenderer.on('list-product', (event) => {
-            history.push('/products');
+        ipcRenderer.on('list-orders', (event) => {
+            history.push('/orders');
         });
 
         ipcRenderer.on('new-billing', (event) => {

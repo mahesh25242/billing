@@ -3,9 +3,9 @@
 import * as React from 'react';
 import {  Route, Switch, useRouteMatch } from 'react-router-dom';
 import { EditProduct } from './EditProduct';
-import ListProducts from './ListProducts';
+import ListProducts from './ListOrders';
 
-const Products = () => {
+const Orders = () => {
     const { path, url } = useRouteMatch();    
       
       
@@ -22,4 +22,4 @@ const Products = () => {
     </>);
 };
 
-export default Products;
+export default Orders;

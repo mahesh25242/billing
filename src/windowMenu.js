@@ -82,14 +82,14 @@ export const windowMenu = (win) =>  [
     },
     
     {
-        label: 'product',        
+        label: 'Orders',        
         submenu: [
           {
-            label: 'List Product',            
+            label: 'List Orders',            
             accelerator: 'Shift+CmdOrCtrl+P',
-            id: 'ListProduct',
+            id: 'ListOrders',
             click: () =>{                       
-                win.webContents.send('list-product');
+                win.webContents.send('list-orders');
             }
           },
           {
