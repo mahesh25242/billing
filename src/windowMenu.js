@@ -91,15 +91,7 @@ export const windowMenu = (win) =>  [
             click: () =>{                       
                 win.webContents.send('list-orders');
             }
-          },
-          {
-            label: 'Create Product',
-            accelerator: 'Shift+CmdOrCtrl+N',
-            click: () =>{                                    
-                win.webContents.send('create-product');
-            }
-
-          }
+          }          
        ]
     },
     {

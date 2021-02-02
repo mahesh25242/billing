@@ -33,10 +33,7 @@ const MyHeaderComponent = (props: any) => {
             history.push('/billing');
         });
         
-        ipcRenderer.on('create-product', (event) => {
-            history.push('/products/create');
-        });
-
+       
         ipcRenderer.on('sign-out', (event) => {
             localStorage.removeItem('token');
             props.dispatch({ type: 'REMOVE_LOGIN', payload: null });                         
