@@ -8,10 +8,9 @@ export class ShopService {
  
   
 
- shop () {
-  const tokenStr = localStorage.getItem('token');
-  if(!tokenStr) return empty();
-  const token = JSON.parse(tokenStr)  
+ shop (token = null) {   
+  if(!token) return empty();
+  //const token = JSON.parse(tokenStr)  
   return ajax({
     url: `${config.apiUrl}/shop`,
     method: 'GET',

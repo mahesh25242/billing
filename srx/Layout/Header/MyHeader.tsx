@@ -62,9 +62,11 @@ const MyHeaderComponent = (props: any) => {
 
     
     useEffect(() => {
-        let shopSubscr:Subscription;
-        if(props.token){
-            shopSubscr = shopService.shop().subscribe((shop: any)=>{                
+        let shopSubscr:Subscription;        
+        if(Object.keys(props.token).length ){
+            
+            shopSubscr = shopService.shop(props.token).subscribe((shop: any)=>{  
+                console.log(shop)              
                 props.dispatch({ type: 'SET_SHOP', payload: shop.response });   
             });
         }

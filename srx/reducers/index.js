@@ -29,7 +29,7 @@ const initialState = {
     }    
     if (action.type === REMOVE_LOGIN) {      
       return Object.assign({}, state, {
-        token: action.payload
+        token: {}
       });
     }   
     if (action.type === BILLING_TABS) {      
