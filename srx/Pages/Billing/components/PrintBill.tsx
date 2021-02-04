@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-var-requires */
 /* eslint-disable @typescript-eslint/no-inferrable-types */
 import * as React from 'react';
 import { Modal, Button, Form, Row, Col, Input, Descriptions, message, notification } from 'antd';
@@ -5,12 +6,9 @@ import { PrinterOutlined } from '@ant-design/icons';
 import { getTimeProps } from 'antd/lib/date-picker/generatePicker';
 import { connect } from 'react-redux';
 import { ProductService } from '../../../services';
+import { ipcRenderer } from 'electron';
 
-import { PosPrintData, PosPrintOptions} from "electron-pos-printer";
-import * as path from "path";
-import { remote } from 'electron';
 
-const {PosPrinter} = remote.require("electron-pos-printer");
 
 
 
@@ -25,14 +23,16 @@ const PrintBillComponent = (props: any) =>{
     const [form] = Form.useForm();
 
     const showModal = () => {
+     
+           
+       
         setIsModalVisible(true);
       };
     
       const handleOk = () => {
         
         let cart: any[] = [];
-        let billProductArr:any[] = [];
-        let grandTotal: number = 0;
+        
         props.cart.map((pdt:any) => {
           pdt.shop_product_selected_variant = pdt.selectedVarient;
           const item = {
@@ -41,9 +41,7 @@ const PrintBillComponent = (props: any) =>{
             product: pdt,
             qty: pdt.selectedVarient.quantity
           };
-          cart = [...cart, item]
-          billProductArr = [...billProductArr, [`${pdt.name} - ${pdt.selectedVarient.name}`, item.qty, item.price ]];
-          grandTotal +=item.price;
+          cart = [...cart, item]          
         })
         
         if(!props.shop.shop_delivery){
@@ -59,101 +57,17 @@ const PrintBillComponent = (props: any) =>{
           console.log(res?.response);
           message.success(`successfully created bill ${form.getFieldValue(`name`) ?? ``}`);
 
-
-          const options: PosPrintOptions = {
-            preview: true,
-            width: '170px',       
-            margin: '0 0 0 0',    
-            copies: 1,
-            printerName: 'Deskjet-2540',
-            timeOutPerLine: 400,
-            silent:true,
-            pageSize: { height: 301000, width: 71000 } // page size
-         }
           
-         const data: PosPrintData[] = [
-            // {
-            //   type: 'image',                                       
-            //   path: path.join(__dirname, 'assets/banner.png'),     // file path
-            //   position: 'center',                                  // position of image: 'left' | 'center' | 'right'
-            //   width: '60px',                                           // width of image in px; default: auto
-            //   height: '60px',                                          // width of image in px; default: 50 or '50px'
-            // },
-            {
-               type: 'text',                                       // 'text' | 'barCode' | 'qrCode' | 'image' | 'table
-               value: `${props.shop.name}`,
-               style: `text-align:center;`,
-               css: {"font-weight": "700", "font-size": "14px"}
-            },
-            {
-              type: 'text',                                       // 'text' | 'barCode' | 'qrCode' | 'image' | 'table
-              value: `${props.shop.address}`,
-              style: `text-align:center;`,
-              css: {"font-weight": "700", "font-size": "14px"}
-           },
-           
-          {
-            type: 'text',                                       // 'text' | 'barCode' | 'qrCode' | 'image' | 'table
-            value: `${props.shop.city.name}-${props.shop.pin}`,
-            style: `text-align:center;`,
-            css: {"font-weight": "700", "font-size": "14px"}
-          },
-          {
-            type: 'text',                                       // 'text' | 'barCode' | 'qrCode' | 'image' | 'table
-            value: `Phone: ${props.shop.phone}`,
-            style: `text-align:center;`,
-            css: {"font-weight": "700", "font-size": "14px"}
-          },
-          {
-            type: 'text',                       // 'text' | 'barCode' | 'qrCode' | 'image' | 'table'
-            value: `<hr/>`,                        
-          },
-          {
-            type: 'text',                       // 'text' | 'barCode' | 'qrCode' | 'image' | 'table'
-            value: `To: ${postParm.name ?? '-'}${ (postParm.phone) ? `-${postParm.phone}` :''}`,
-            style: `text-align:left;color: red;`,
-            css: {"text-decoration": "underline", "font-size": "10px"}
-          },
-            // {
-            //    type: 'barCode',
-            //    value: 'HB4587896',
-            //    height: '12',                     // height of barcode, applicable only to bar and QR codes
-            //    width: '1',                       // width of barcode, applicable only to bar and QR codes
-            //    displayValue: true,             // Display value below barcode
-            //    fontsize: 8,
-            // },{
-            //   type: 'qrCode',
-            //    value: props.shop.shop_url,
-            //    height: '55',
-            //    width: '55',
-            //    style: 'margin: 10 20px 20 20px'
-            //  },
-             {
-                type: 'table',
-                // style the table
-                style: 'border: 1px solid #ddd',
-                // list of the columns to be rendered in the table header
-                tableHeader: ['Item', 'Qty', 'Amount'],
-                // multi dimensional array depicting the rows and columns of the table body
-                tableBody: billProductArr,
-                // list of columns to be rendered in the table footer
-                tableFooter: ['', 'Grand Total', `${grandTotal}`],
-                // custom style for the table header
-                tableHeaderStyle: ' color: black;',
-                // custom style for the table body
-                tableBodyStyle: 'border: 0.5px solid #ddd',
-                // custom style for the table footer
-                tableFooterStyle: '  font-weight: bold',
-             }             
-         ]
-         PosPrinter.print(data, options)
-          .then((suc:any) => {
-            
-            console.log(suc)
-          })
-          .catch((error:any) => {
-             console.error(error);
-           });
+         const data: any = { 
+           shop: props.shop,
+           postParm: postParm,           
+         };
+         
+         
+
+         ipcRenderer.send('print', JSON.stringify(data));
+
+         
 
            props.dispatch({ type: 'EMPTY_CART', payload: null}); 
            

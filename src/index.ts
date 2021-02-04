@@ -1,7 +1,11 @@
-import { app, BrowserWindow, Menu, MenuItem } from 'electron';
+import { app, BrowserWindow, Menu, MenuItem, ipcMain } from 'electron';
 declare const MAIN_WINDOW_WEBPACK_ENTRY: any;
 
 import { windowMenu } from './windowMenu';
+
+
+import { printBill }  from './print';
+
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if (require('electron-squirrel-startup')) { // eslint-disable-line global-require
@@ -66,5 +70,6 @@ app.on('activate', () => {
   }
 });
 
+printBill(); 
 // In this file you can include the rest of your app's specific main process
 // code. You can also put them in separate files and import them here.

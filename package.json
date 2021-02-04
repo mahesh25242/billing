@@ -89,7 +89,6 @@
     "@types/react-router": "^5.1.10",
     "@types/react-router-dom": "^5.1.7",
     "antd": "^4.10.0",
-    "electron-pos-printer": "^1.2.4",
     "electron-squirrel-startup": "^1.0.0",
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
