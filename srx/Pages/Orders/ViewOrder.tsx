@@ -70,7 +70,8 @@ export const ViewOrderComponent = (props: any) =>{
         </Descriptions.Item> 
       </Descriptions>
       <h3>Products</h3>
-      <Table dataSource={props.order.shop_order_item} columns={columns} />         
+      <Table dataSource={props.order.shop_order_item} columns={columns}
+      rowKey={record => `${record.id}`} />         
     </>;
 }
 

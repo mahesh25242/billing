@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { AutoComplete, Form, Select } from 'antd';
+import { AutoComplete, Form, Select, Spin } from 'antd';
 import { FormInstance } from 'antd/lib/form';
 import { connect } from 'react-redux';
 
@@ -55,7 +55,9 @@ const ProductAutoSuggestComponent:React.FC<any> = (props: any) => {
   }
   
   
-    return (<Form.Item name="product" label="Product" rules={[{ required: true }]}>
+    return (
+      <Spin spinning={!props.products}>
+    <Form.Item name="product" label="Product" rules={[{ required: true }]}>
     <Select
       autoFocus
       showSearch      
@@ -77,7 +79,7 @@ const ProductAutoSuggestComponent:React.FC<any> = (props: any) => {
       }
       
     </Select>
-  </Form.Item>);
+  </Form.Item></Spin>);
 }
 
 

@@ -70,7 +70,7 @@ const PrintBillComponent = (props: any) =>{
          
 
            props.dispatch({ type: 'EMPTY_CART', payload: null}); 
-           
+           setIsModalVisible(false);
 
         }, error=>{
           let msg:string = '';
@@ -91,7 +91,7 @@ const PrintBillComponent = (props: any) =>{
 
                     
         })
-        setIsModalVisible(false);
+        
       };
     
       const handleCancel = () => {

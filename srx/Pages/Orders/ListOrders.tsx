@@ -2,7 +2,7 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 import * as React from 'react';
 import { OrderService } from '../../services';
-import { Button, Modal, PageHeader, Table } from 'antd';
+import { Button, Modal, PageHeader, Spin, Table } from 'antd';
 
 
 import { ViewOrder } from './ViewOrder';
@@ -79,7 +79,8 @@ const ListOrders = () => {
           }
         ]}/>
        {
-       orders &&   <Table dataSource={orders} 
+        <Spin spinning={orders == null}>
+          <Table dataSource={orders} 
        columns={columns}  rowKey="id" scroll={{ y: 400 }} pagination={{defaultCurrent: 1, 
         total:totalPage,
         pageSize:20,
@@ -88,13 +89,14 @@ const ListOrders = () => {
           console.log(current, pageSize)
         },
         onChange: (current, size) =>{
+          SetOrders(null);
           prodSubscr && prodSubscr.unsubscribe();
           prodSubscr = orderService.orders(current).subscribe(res=>{
             SetOrders(res.response.data);
             SetTotalPage(res.response.total)
           })
         }
-      }} />
+      }} /></Spin>
       }
        <Modal
           visible={order}
