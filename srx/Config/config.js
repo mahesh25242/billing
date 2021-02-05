@@ -1,5 +1,5 @@
 const config = {
-    apiUrl: `https://agoranature.com/api/public/v1`, //`http://localhost/cart/api/public/v1`,
+    apiUrl: `http://localhost/cart/api/public/v1`, //`https://agoranature.com/api/public/v1`,
     ajax:{
         header:{
             'Content-Type': 'application/json',              

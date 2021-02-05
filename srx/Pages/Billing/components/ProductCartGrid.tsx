@@ -25,7 +25,7 @@ const ProductCartGridComponent = (props: any) =>{
           dataIndex: 'name',
           key: 'id',
           ellipsis: true,
-          render: (text: string, record:any, index:number) => <a>{text}</a>,
+          // render: (text: string, record:any, index:number) => text,
         },
         {
           title: 'Varient',
@@ -80,13 +80,13 @@ const ProductCartGridComponent = (props: any) =>{
           title: 'Unit Price',
           dataIndex: 'price',
           key: 'price',
-          render: (text: string, record:any, index:number) => <a> ₹ { record.selectedVarient && record.selectedVarient.price} </a>,
+          render: (text: string, record:any, index:number) => <> ₹ { record.selectedVarient && record.selectedVarient.price} </>,
         },
         {
           title: 'Total',
           dataIndex: 'total',
           key: 'total',
-          render: (text: string, record:any, index:number) => <a> ₹ { record.selectedVarient && (record.selectedVarient.quantity * record.selectedVarient.price)} </a>,
+          render: (text: string, record:any, index:number) => <> ₹ { record.selectedVarient && (record.selectedVarient.quantity * record.selectedVarient.price)} </>,
         },
         {
           title: 'Options',

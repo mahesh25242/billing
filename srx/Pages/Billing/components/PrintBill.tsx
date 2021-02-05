@@ -49,8 +49,8 @@ const PrintBillComponent = (props: any) =>{
         }
         const postParm = {
           cart : cart,
-          name: form.getFieldValue("name") ?? 'billing',
-          phone: form.getFieldValue("mobile") ?? '1234567890',
+          name: form.getFieldValue("name") ?? '',
+          phone: form.getFieldValue("mobile") ?? '',
           selectedLocation:props.shop.shop_delivery[0]
         }
         productService.createOrder(postParm).subscribe(res=>{

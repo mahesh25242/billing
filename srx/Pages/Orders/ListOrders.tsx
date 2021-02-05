@@ -6,21 +6,30 @@ import { Button, Modal, PageHeader, Spin, Table } from 'antd';
 
 
 import { ViewOrder } from './ViewOrder';
-import { Link, useRouteMatch } from 'react-router-dom';
+import { Link, useHistory, useRouteMatch } from 'react-router-dom';
 
 import { MyBreadcrumb } from '../../SharedComponents';
 import { Subscription } from 'rxjs';
 
 import { remote } from 'electron';
+import { connect } from 'react-redux';
 const { Menu, MenuItem } = remote;
 
-const ListOrders = () => {    
+
+const mapStateToProps = (state: { product: any;billingTab: any, billingTabs:any  }) => {
+  return { product: state.product[state.billingTab], billingTabs: state.billingTabs, billingTab: state.billingTab };
+};
+
+
+    
+const ListOrdersComponent = (props:any) => {   
+  const history = useHistory(); 
     const orderService = new OrderService();
     const [orders, SetOrders] = React.useState(null);
     const [totalPage, SetTotalPage] = React.useState(0);
     const [order, SetOrder] = React.useState(null);
 
-
+console.log(props)
     
     const { path, url } = useRouteMatch();    
     let  prodSubscr:Subscription;
@@ -77,7 +86,24 @@ const ListOrders = () => {
           title: 'Options',
           dataIndex: 'options',
           key: 'options',
-          render: (text: string, record: any, index: number) => <><a>To Billing</a></>,
+          render: (text: string, record: any, index: number) => <>
+          {record.status ==2 &&
+          <a onClick={() => {            
+            props.dispatch({ type: 'BILLING_TABS', payload: [...props.billingTabs, `Tab ${props.billingTabs+1}`] });
+            props.dispatch({ type: 'SELECTED_BILLING_TAB', payload: props.billingTabs.length });
+            
+            record.shop_order_item.map((res:any)=>{
+              let product = res.shop_product_variant.shop_product;
+              let shop_product_variant = res.shop_product_variant;
+              shop_product_variant = {...shop_product_variant,...{quantity: 1} }
+              product = {...product, ...{selectedVarient: shop_product_variant}, ...{shop_product_variant: [res.shop_product_variant]}}
+              props.dispatch({ type: 'CART_PRODUCTS', payload: product});  
+              history.push('/billing');
+            });            
+            
+          }}>Send to Billing</a>
+          }
+          </>,
         },
       ];
       
@@ -134,5 +160,8 @@ const ListOrders = () => {
         </Modal>
     </>);
 };
+
+
+const ListOrders = connect(mapStateToProps)(ListOrdersComponent);
 
 export default ListOrders;
